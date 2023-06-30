@@ -1,0 +1,238 @@
+
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+/* LOGIN & REGISTER */
+.bg-container {
+  position: relative;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.blob {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  filter: blur(20px);
+}
+
+.blob:nth-child(1) {
+  animation: move 15s linear infinite;
+}
+
+.blob:nth-child(2) {
+  animation: move2 15s linear infinite;
+}
+
+.blob:nth-child(3) {
+  animation: move3 15s linear infinite;
+}
+
+@keyframes move {
+  0% {
+    transform: translate(0, 0);
+  }
+  20% {
+    transform: translate(10vw, -30vh);
+  }
+  40% {
+    transform: translate(-10vw, -50vh);
+  }
+  60% {
+    transform: translate(20vw, -70vh);
+  }
+  80% {
+    transform: translate(-20vw, -90vh);
+  }
+  100% {
+    transform: translate(0, -110vh);
+  }
+}
+
+@keyframes move2 {
+  0% {
+    transform: translate(0, 0);
+  }
+  20% {
+    transform: translate(-10vw, -40vh);
+  }
+  40% {
+    transform: translate(-30vw, -60vh);
+  }
+  60% {
+    transform: translate(10vw, -80vh);
+  }
+  80% {
+    transform: translate(-10vw, -100vh);
+  }
+  100% {
+    transform: translate(0, -120vh);
+  }
+}
+
+@keyframes move3 {
+  0% {
+    transform: translate(50vw, -80vh);
+  }
+  20% {
+    transform: translate(0, -40vh);
+  }
+  40% {
+    transform: translate(-30vw, -60vh);
+  }
+  60% {
+    transform: translate(-30vw, -80vh);
+  }
+  80% {
+    transform: translate(50vw, -100vh);
+  }
+  100% {
+    transform: translate(50vw, -120vh);
+  }
+}
+
+
+
+
+
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+/* LOADER */
+
+.loader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.loader__spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #3498db;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+
+/* DISABLE SELECTION */
+
+
+/* NEUMORPHISM */
+.neumorphism {
+  background: linear-gradient(225deg, #cacaca, #f0f0f0);
+  box-shadow: 10px 10px 10px #c7c7c7,
+              10px 10px 10px #f9f9f9;
+}
+
+.neuBlue {
+  border-radius: 0px;
+  background: #336ee7;
+  box-shadow: inset 8px -8px 46px #2857b6,
+            inset -8px 8px 46px #3e85ff;
+  }
+
+/* GLASSMORPHISM */
+.glass {
+  background: rgba( 255, 255, 255, 0.25 );
+  box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+  backdrop-filter: blur( 4px );
+  -webkit-backdrop-filter: blur( 4px );
+  border-radius: 10px;
+  border: 1px solid rgba( 255, 255, 255, 0.18 );
+}
+
+/* GRADIENTES */
+.bgGradient {
+  background-image: linear-gradient(
+  180deg,
+  hsl(220deg 79% 55%) 0%,
+  hsl(228deg 77% 68%) 29%,
+  hsl(232deg 77% 77%) 43%,
+  hsl(235deg 78% 85%) 57%,
+  hsl(237deg 79% 93%) 71%,
+  hsl(0deg 0% 100%) 100%
+);
+}
+
+.gradientFeature {
+  background-image: radial-gradient(
+    hsl(220deg 78% 77%) 0%,
+    hsl(221deg 79% 75%) 21%,
+    hsl(221deg 79% 73%) 30%,
+    hsl(221deg 80% 70%) 39%,
+    hsl(221deg 80% 68%) 46%,
+    hsl(221deg 80% 66%) 54%,
+    hsl(221deg 80% 63%) 61%,
+    hsl(221deg 79% 61%) 69%,
+    hsl(221deg 79% 58%) 79%,
+    hsl(220deg 79% 55%) 100%
+);
+}
+
+/* PREMIUM FLAG */
+
+.premium-flag {
+  position: relative;
+}
+
+.premium-flag::before {
+  content: "$";
+  position: absolute;
+  padding: 0.5rem 1rem;
+  box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.2);
+  top: -2px;
+  right: 1rem;
+  font-size: 24px;
+  background-color: #2c8dfc;
+  border-radius: 3px 3px 5px 5px;
+  color: #fff; 
+}
