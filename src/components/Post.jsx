@@ -4,34 +4,36 @@ import { Link } from "react-router-dom";
 import Input from "./Input";
 import Button from "./Button";
 import Comment from "./Comment";
-import { getUserId } from "../utils/getUserId";
-import { formatPostDate } from "../utils/formatPostDate";
+import { getUserId } from "../utils/users/getUserId";
+import { formatPostDate } from "../utils/helpers/formatPostDate";
 import Loader from "./Loader";
 import Modal from "./Modal";
-import Archivo from "./Archivo";
-import { BASE_URL } from "../utils/config.js";
-import { AuthContext } from "../contexts/AuthContext";
+import File from "./File";
+import { BASE_URL } from "../utils/helpers/config.js";
+import ReportModal from "./ReportModal";
 
 const Post = ({
+  postId,
+  premium,
   name,
   lastName,
   userName,
   img,
-  ratings,
-  text,
-  file,
-  likes,
-  title,
-  date,
-  onDelete,
-  postId,
   author,
   authorPremium,
-  user,
+  title,
+  text,
+  date,
+  likes,
   comments,
-  premium,
-  fetchComments,
+  file,
+  ratings,
   showCommentsForm,
+  postPage,
+  fetchComments,
+  onDelete,
+  user,
+  isAdmin,
 }) => {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [liked, setLiked] = useState(false);
@@ -46,13 +48,14 @@ const Post = ({
   const [averageRating, setAverageRating] = useState(0);
   const [isRated, setIsRated] = useState(false);
   const [errors, setErrors] = useState({});
+  const [favorite, setFavorite] = useState(false);
+  const [showReportModal, setShowReportModal] = useState(false);
   const [values, setValues] = useState({
     content: "",
   });
-  const { token } = React.useContext(AuthContext);
 
   useEffect(() => {
-    getUserId(token).then((result) => {
+    getUserId().then((result) => {
       setUserId(result);
       const hasLikedPost = likes.some((like) => like.userId === result);
       setLiked(hasLikedPost);
@@ -60,8 +63,10 @@ const Post = ({
       const userRating = ratings.find((rating) => rating.userId === result);
       setIsRated(hasRatedPost);
       setRating(userRating ? userRating.rating : null);
+      const hasInFavorites = user.favoritePosts.includes(postId);
+      setFavorite(hasInFavorites);
     });
-  }, [likes, ratings, token]);
+  }, [likes, ratings, user, postId]);
 
   useEffect(() => {
     const calculateAverageRating = () => {
@@ -110,13 +115,10 @@ const Post = ({
     try {
       const response = await fetch(`${BASE_URL}/posts/${postId}`, {
         method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        credentials: 'include',
       });
 
       const data = await response.json();
-      console.log(data);
       setShowConfirmation(false);
       onDelete(data);
     } catch (error) {
@@ -136,15 +138,14 @@ const Post = ({
     try {
       const response = await fetch(`${BASE_URL}/posts/${postId}/like`, {
         method: "PATCH",
+        credentials: 'include',
         headers: {
-          Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ userId }),
       });
 
       const data = await response.json();
-      console.log(data);
       if (data.status === "success") {
         setLiked((prevLiked) => !prevLiked);
         setLikes((prevLikes) => prevLikes + 1);
@@ -160,8 +161,8 @@ const Post = ({
     try {
       const response = await fetch(`${BASE_URL}/posts/${postId}/unlike`, {
         method: "DELETE",
+        credentials: 'include',
         headers: {
-          Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ userId }),
@@ -171,6 +172,53 @@ const Post = ({
       if (data.status === "success") {
         setLiked((prevLiked) => !prevLiked);
         setLikes((prevLikes) => prevLikes - 1);
+      }
+      setMessage(data.message);
+      setStatus(data.status);
+    } catch (error) {
+      return console.log(error);
+    }
+  };
+
+  const handleFavorite = async () => {
+    try {
+      const response = await fetch(`${BASE_URL}/post/${postId}/favorite`, {
+        method: "PATCH",
+        credentials: 'include',
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ userId }),
+      });
+
+      const data = await response.json();
+      if (data.status === "success") {
+        setFavorite((prevFavorite) => !prevFavorite);
+      }
+      setMessage(data.message);
+      setStatus(data.status);
+    } catch (error) {
+      return console.log(error);
+    }
+  };
+
+  const handleDeleteFavorite = async () => {
+    try {
+      const response = await fetch(
+        `${BASE_URL}/post/${postId}/delete-favorite`,
+        {
+          method: "PATCH",
+          credentials: 'include',
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ userId }),
+        }
+      );
+
+      const data = await response.json();
+      if (data.status === "success") {
+        setFavorite((prevFavorite) => !prevFavorite);
       }
       setMessage(data.message);
       setStatus(data.status);
@@ -213,8 +261,8 @@ const Post = ({
     try {
       const response = await fetch(`${BASE_URL}/create-comment`, {
         method: "POST",
+        credentials: 'include',
         headers: {
-          Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify(dataToSend),
@@ -258,8 +306,8 @@ const Post = ({
     try {
       const response = await fetch(`${BASE_URL}/posts/${postId}/rate`, {
         method: "PATCH",
+        credentials: 'include',
         headers: {
-          Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify(ratingData),
@@ -303,8 +351,8 @@ const Post = ({
     try {
       const response = await fetch(`${BASE_URL}/posts/${postId}/rate`, {
         method: "DELETE",
+        credentials: 'include',
         headers: {
-          Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify(ratingData),
@@ -328,7 +376,7 @@ const Post = ({
     }
   };
 
-  if (showModal) {
+  if (showModal || showReportModal) {
     document.documentElement.style.overflow = "hidden";
   } else {
     document.documentElement.style.overflow = "auto";
@@ -336,7 +384,7 @@ const Post = ({
 
   return (
     <article
-      className={`w-10/12 mx-auto rounded-lg py-3 px-2 ${
+      className={`w-12/12 lg:w-10/12 relative mx-auto rounded-lg py-3 px-2 ${
         premium ? "bg-white shadow-2xl" : "bg-white shadow-lg"
       }`}
     >
@@ -352,7 +400,7 @@ const Post = ({
                 />
               </Link>
               <div className="flex flex-col items-start">
-                <h3 className="font-semibold my-auto mx-3">
+                <h3 className="font-semibold text-sm xl:text-base my-auto mx-3">
                   {name} {lastName}{" "}
                   {authorPremium && (
                     <span>
@@ -364,12 +412,16 @@ const Post = ({
                     </span>
                   )}
                 </h3>
-                <p className="text-md text-gray-400 mx-3">@{userName}</p>
+                <p className="text-sm lg:text-base text-gray-400 mx-3">
+                  @{userName}
+                </p>
               </div>
             </div>
             <div className="flex p-3 font-semibold text-lg items-center">
-              <p className="mx-3 text-sm text-gray-500">{date}</p>
-              {user._id === author && (
+              <p className="mx-1 lg:mx-3 text-xs lg:text-sm text-gray-500">
+                {date}
+              </p>
+              {(user._id === author || isAdmin) && (
                 <button
                   onClick={handleDeleteClick}
                   className="text-blue-600 bg-white border-2 border-solid border-blue-600 rounded-lg p-5 w-10 h-10 flex justify-center items-center ml-3 hover:scale-105 focus:scale-105 transition duration-200"
@@ -380,58 +432,59 @@ const Post = ({
             </div>
           </div>
           <Link to={`/posts/${postId}`}>
-            <h4 className="text-start font-bold my-2 text-2xl px-8 ">
+            <h4 className="text-start font-bold my-2 text-xl lg:text-2xl px-8 ">
               {title}
             </h4>
           </Link>
-          <p className="text-start py-3 px-8 text-gray-700 overflow-hidden break-words">
+          <p className="text-start py-3 px-8 text-base text-gray-700 overflow-hidden break-words">
             {text}
           </p>
           <div className="flex gap-1 justify-center items-center">
             {file ? (
               <>
                 {user._id === author ? (
-                  <Archivo
+                  <File
                     premium={premium}
                     averageRating={averageRating}
                     postRatings={postRatings}
                     text={title}
                     className={
-                      "bg-gradient-to-r from-blue-600 to-blue-700 cursor-pointer"
+                      "bg-gradient-to-t from-blue-500 to-blue-600 cursor-pointer"
                     }
                     onClick={() => setShowModal(true)}
                   />
                 ) : (
                   <>
                     {premium && user.premium && (
-                      <Archivo
+                      <File
                         premium={premium}
                         averageRating={averageRating}
                         postRatings={postRatings}
                         text={title}
                         className={
-                          "bg-gradient-to-r from-blue-600 to-blue-700 cursor-pointer"
+                          "bg-gradient-to-t from-blue-500 to-blue-600 cursor-pointer"
                         }
                         onClick={() => setShowModal(true)}
                       />
                     )}
                     {premium && !user.premium && (
-                      <Archivo
+                      <File
                         premium={premium}
                         averageRating={averageRating}
                         postRatings={postRatings}
                         text={"Contenido Premium"}
                         className={"bg-gray-500"}
+                        link={"/precios"}
                       />
                     )}
                     {!premium && (
-                      <Archivo
+                      <File
                         premium={premium}
                         averageRating={averageRating}
                         postRatings={postRatings}
                         text={title}
                         className={
-                          "bg-gradient-to-r from-blue-600 to-blue-700 cursor-pointer"
+                          "bg-gradient-to-t from-blue-500 to-blue-600 cursor-pointer"
                         }
                         onClick={() => setShowModal(true)}
                       />
@@ -444,7 +497,7 @@ const Post = ({
               <div className="flex justify-center gap-2">
                 <button
                   onClick={handleDeleteRating}
-                  className="rounded-lg bg-white text-blue-600 border-2 border-solid border-blue-600 p-3 hover:bg-blue-200"
+                  className="rounded-lg bg-white text-blue-500 border-2 border-solid border-blue-500 p-3 hover:bg-blue-200"
                 >
                   <i className="fa-solid fa-trash"></i> {rating}{" "}
                   <i className="fa-solid fa-star fa-xl"></i>
@@ -452,29 +505,32 @@ const Post = ({
               </div>
             )}
           </div>
-          {file && !isRated && premium && (user.premium || userId === author) && (
-            <div className="flex justify-center gap-2 mt-4 text-blue-600">
-              {[1, 2, 3, 4, 5].map((value) => (
-                <button key={value} onClick={() => handleRating(value)}>
-                  {value <= rating ? (
-                    <i className="fa-solid fa-star fa-xl"></i>
-                  ) : (
-                    <i className="fa-regular fa-star fa-xl"></i>
-                  )}
-                </button>
-              ))}
-              {!isRated && (
-                <button
-                  onClick={handleRatingSubmit}
-                  className="rounded-lg bg-gradient-to-t from-blue-600 to-blue-700 text-white font-semibold py-2 px-4 hover:bg-blue-500"
-                >
-                  Valorar
-                </button>
-              )}
-            </div>
-          )}
+          {file &&
+            !isRated &&
+            premium &&
+            (user.premium || userId === author) && (
+              <div className="flex justify-center gap-2 mt-4 text-blue-600">
+                {[1, 2, 3, 4, 5].map((value) => (
+                  <button key={value} onClick={() => handleRating(value)}>
+                    {value <= rating ? (
+                      <i className="fa-solid fa-star fa-xl"></i>
+                    ) : (
+                      <i className="fa-regular fa-star fa-xl"></i>
+                    )}
+                  </button>
+                ))}
+                {!isRated && (
+                  <button
+                    onClick={handleRatingSubmit}
+                    className="rounded-lg bg-blue-500 text-white font-semibold py-2 px-4 hover:bg-blue-500"
+                  >
+                    Valorar
+                  </button>
+                )}
+              </div>
+            )}
           {file && !isRated && !premium && (
-            <div className="flex justify-center gap-2 mt-4 text-blue-600">
+            <div className="flex justify-center gap-2 mt-4 text-blue-500">
               {[1, 2, 3, 4, 5].map((value) => (
                 <button key={value} onClick={() => handleRating(value)}>
                   {value <= rating ? (
@@ -487,7 +543,7 @@ const Post = ({
               {!isRated && (
                 <button
                   onClick={handleRatingSubmit}
-                  className="rounded-lg bg-gradient-to-t from-blue-600 to-blue-700 text-white font-semibold py-2 px-4 hover:bg-blue-500"
+                  className="rounded-lg bg-blue-500 text-white font-semibold py-2 px-4 hover:bg-blue-500"
                 >
                   Valorar
                 </button>
@@ -504,12 +560,19 @@ const Post = ({
               username={userName}
             />
           )}
+          {showReportModal && (
+            <ReportModal
+              closeModal={() => setShowReportModal(false)}
+              postId={postId}
+              userId={user._id}
+            />
+          )}
           <div className="flex justify-center gap-5 mt-6">
             <button
-              className={`rounded-lg shadow-md text-center p-3 font-semibold ${
+              className={`rounded-lg text-sm md:text-base shadow-md text-center p-3 font-semibold ${
                 liked
                   ? "bg-white text-blue-600 border-2 border-solid border-blue-500"
-                  : "bg-blue-600 text-white"
+                  : "bg-blue-500 text-white"
               }`}
               onClick={() =>
                 liked
@@ -522,12 +585,60 @@ const Post = ({
             </button>
             <Link
               to={`/posts/${postId}`}
-              className="bg-blue-600 text-white rounded-lg shadow-md text-center p-3 font-semibold"
+              className="bg-blue-500 text-white text-sm md:text-base  rounded-lg shadow-md text-center p-3 font-semibold"
             >
               <i className="fa-solid fa-message mx-3"></i> Comentarios (
               {postComments && postComments.length})
             </Link>
           </div>
+          {postPage && (
+            <>
+              <div className="flex flex-row-reverse justify-between w-full">
+                <div className=" m-5 text-blue-600">
+                  {favorite ? (
+                    <i
+                      className="fa-solid fa-bookmark fa-xl cursor-pointer"
+                      onClick={handleDeleteFavorite}
+                    ></i>
+                  ) : (
+                    <i
+                      className="fa-regular fa-bookmark fa-xl cursor-pointer"
+                      onClick={handleFavorite}
+                    ></i>
+                  )}
+                </div>
+                <div className="m-5 text-blue-600">
+                  <i
+                    className="fa-regular fa-flag fa-xl cursor-pointer"
+                    onClick={() => setShowReportModal(true)}
+                  ></i>
+                </div>
+              </div>
+            </>
+          )}
+          {!postPage && (
+            <>
+              <div className="absolute bottom-0 right-0 m-5 text-blue-600">
+                {favorite ? (
+                  <i
+                    className="fa-solid fa-bookmark fa-xl cursor-pointer"
+                    onClick={handleDeleteFavorite}
+                  ></i>
+                ) : (
+                  <i
+                    className="fa-regular fa-bookmark fa-xl cursor-pointer"
+                    onClick={handleFavorite}
+                  ></i>
+                )}
+              </div>
+              <div className="absolute bottom-0 left-0 m-5 text-blue-600">
+                <i
+                  className="fa-regular fa-flag fa-xl cursor-pointer"
+                  onClick={() => setShowReportModal(true)}
+                ></i>
+              </div>
+            </>
+          )}
           {showConfirmation && (
             <div>
               <p className="my-3 text-center font-semibold">

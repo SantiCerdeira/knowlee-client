@@ -1,19 +1,17 @@
-import React, { useState, useEffect, useRef, useContext } from "react";
-import { isAuthenticated } from "../utils/auth.js";
-import { useNavigate } from "react-router-dom";
-import { BASE_URL, SOCKET_URL } from "../utils/config.js";
-import { getAuthenticatedUser } from "../utils/getAuthenticateUser.js";
-import { getUserId } from "../utils/getUserId.js";
+import React, { useState, useEffect, useRef } from "react";
+import { BASE_URL, SOCKET_URL } from "../utils/helpers/config.js";
+import { getAuthenticatedUser } from "../utils/users/getAuthenticateUser.js";
+import { getUserId } from "../utils/users/getUserId.js";
 import Navbar from "../components/Navbar.jsx";
-import { getUserById } from "../utils/getUserById.js";
-import { formatPostDate } from "../utils/formatPostDate.js";
+import { getUserById } from "../utils/users/getUserById.js";
+import { formatPostDate } from "../utils/helpers/formatPostDate.js";
 import Loader from "../components/Loader.jsx";
 import Button from "../components/Button.jsx";
 import io from "socket.io-client";
-import { AuthContext } from "../contexts/AuthContext.jsx";
+import useUsers from "../utils/users/useUsers.js";
+import useAuthentication from "../utils/helpers/useAuthentication.js";
 
 const ChatPage = () => {
-  const [users, setUsers] = useState([]);
   const [selectedChat, setSelectedChat] = useState(null);
   const [user, setUser] = useState(null);
   const [selectedUser, setSelectedUser] = useState(null);
@@ -21,38 +19,30 @@ const ChatPage = () => {
   const [loading, setLoading] = useState(false);
   const [chatLoading, setChatLoading] = useState(false);
   const [socket, setSocket] = useState(null);
+  const [showUserList, setShowUserList] = useState(false);
   const [values, setValues] = useState({
     message: "",
   });
   const chatContainerRef = useRef(null);
-  const { token } = useContext(AuthContext);
+  const { users } = useUsers();
 
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const userAuthenticated = async () => {
-      const result = await isAuthenticated(token);
-      if (!result) navigate("/login");
-    };
-
-    userAuthenticated();
-  }, [navigate, token]);
+  useAuthentication();
 
   useEffect(() => {
     const fetchAuthUserId = async () => {
-      const userId = await getUserId(token);
+      const userId = await getUserId();
       setAuthUserId(userId);
     };
     fetchAuthUserId();
-  }, [token]);
+  }, []);
 
   useEffect(() => {
     const fetchUser = async () => {
-      const user = await getAuthenticatedUser(token);
+      const user = await getAuthenticatedUser();
       setUser(user);
     };
     fetchUser();
-  }, [token]);
+  }, []);
 
   useEffect(() => {
     const newSocket = io(SOCKET_URL);
@@ -66,7 +56,6 @@ const ChatPage = () => {
   useEffect(() => {
     if (socket) {
       socket.on("message", (message) => {
-        console.log("New message received:", message);
         setSelectedChat((prevChat) => ({
           ...prevChat,
           messages: [...prevChat.messages, message],
@@ -76,28 +65,11 @@ const ChatPage = () => {
   }, [socket]);
 
   useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const response = await fetch(`${BASE_URL}/users`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        const data = await response.json();
-        setUsers(data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    fetchUsers();
-  }, [token]);
-
-  useEffect(() => {
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTop =
         chatContainerRef.current.scrollHeight;
     }
+    setShowUserList(false);
   }, [selectedChat]);
 
   const handleUserClick = async (userId) => {
@@ -105,8 +77,8 @@ const ChatPage = () => {
     try {
       const response = await fetch(`${BASE_URL}/chats`, {
         method: "POST",
+        credentials: 'include',
         headers: {
-          Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
@@ -116,7 +88,7 @@ const ChatPage = () => {
 
       const data = await response.json();
       setSelectedChat(data);
-      const newSelectedUser = await getUserById(userId, token);
+      const newSelectedUser = await getUserById(userId);
       setSelectedUser(newSelectedUser);
       setChatLoading(false);
     } catch (error) {
@@ -136,8 +108,8 @@ const ChatPage = () => {
     try {
       const response = await fetch(`${BASE_URL}/${selectedChat._id}/message`, {
         method: "POST",
+        credentials: 'include',
         headers: {
-          Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
@@ -161,10 +133,44 @@ const ChatPage = () => {
   };
 
   return (
-    <div className="min-h-screen">
+    <div className="">
       <Navbar />
-      <div className="w-full flex justify-center gap-3">
-        <div className="bg-blue-500 p-5 w-1/4 min-h-[90vh]">
+      <div className="w-full h-[85vh] flex flex-col lg:flex-row justify-center gap-3">
+        {showUserList && (
+          <div className="relative bg-blue-500  p-5 lg:hidden">
+            <h2 className="text-white text-lg font-bold mb-4">Usuarios</h2>
+            <div className="absolute top-3 right-3 lg:hidden">
+              <button
+                className="bg-blue-400 text-white py-2 px-4 rounded-lg shadow-lg"
+                onClick={() => setShowUserList(!showUserList)}
+              >
+                Cerrar
+              </button>
+            </div>
+            <ul>
+              {users
+                .filter((user) => user._id !== authUserId)
+                .map((user) => (
+                  <li
+                    key={user._id}
+                    onClick={() => handleUserClick(user._id)}
+                    className={`cursor-pointer bg-white text-black p-2 rounded-md shadow-lg hover:bg-gray-300 transition duration-200 font-semibold mb-3 flex items-center ${
+                      selectedUser?._id === user._id &&
+                      "border-2 border-gray-700 scale-[0.98]"
+                    }`}
+                  >
+                    <img
+                      src={user.profileImage}
+                      alt={user.name}
+                      className="w-8 h-8 rounded-full mr-2"
+                    />
+                    <span>{user.name}</span>
+                  </li>
+                ))}
+            </ul>
+          </div>
+        )}
+        <div className="bg-blue-500 p-5 lg:w-1/4 hidden lg:inline-block">
           <h2 className="text-white text-lg font-bold mb-4">Usuarios</h2>
           <ul>
             {users
@@ -188,16 +194,31 @@ const ChatPage = () => {
               ))}
           </ul>
         </div>
-        <div className="bg-white p-5 w-3/4 min-h-[90vh]">
+        <div className="bg-white p-5 lg:w-3/4 h-full">
           <div className="flex flex-col justify-between h-full">
-            <div className="border-b-2 pb-4 mb-4">
+            <div className="h-5/6">
               <h2 className="text-lg font-bold mb-2">Chat</h2>
+              {!showUserList && (
+                <div className="fixed top-24 right-4 lg:hidden">
+                  <button
+                    className="bg-blue-500 text-white py-2 px-4 rounded-lg shadow-lg"
+                    onClick={() => setShowUserList(!showUserList)}
+                  >
+                    Usuarios
+                  </button>
+                </div>
+              )}
               {chatLoading && <Loader />}
               {selectedChat && selectedUser ? (
                 <div
-                  className="h-[70vh] max-w-[90%] mx-auto overflow-y-scroll"
+                  className="customHeight max-w-[90%] mx-auto overflow-y-scroll"
                   ref={chatContainerRef}
                 >
+                  {selectedChat.messages.length === 0 && (
+                    <p className="text-center text-gray-600 my-2">
+                      No hay mensajes
+                    </p>
+                  )}
                   {selectedChat.messages.length !== 0 &&
                     selectedChat.messages.map((message) => (
                       <div
@@ -265,7 +286,7 @@ const ChatPage = () => {
               )}
             </div>
             <form
-              className="flex items-stretch justify-between"
+              className="flex items-stretch justify-between bg-white"
               onSubmit={sendMessage}
             >
               <input
@@ -276,18 +297,17 @@ const ChatPage = () => {
                 value={values.message}
                 className="border border-gray-300 rounded px-3 py-2 w-full mr-2"
                 onChange={handleChange("message")}
+                autoComplete="off"
               />
-              <Button
-                text={
-                  loading ? (
-                    <Loader className="my-0" />
-                  ) : (
-                    <i className="fa-solid fa-paper-plane fa-lg"></i>
-                  )
-                }
-                type="submit"
-                className="w-[15%] z-0 h-full"
-              />
+              {loading ? (
+                <Loader />
+              ) : (
+                <Button
+                  text={<i className="fa-solid fa-paper-plane fa-lg"></i>}
+                  type="submit"
+                  className="w-[15%] z-0 h-full"
+                />
+              )}
             </form>
           </div>
         </div>

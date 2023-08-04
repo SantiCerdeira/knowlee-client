@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import Label from "../components/Label";
 import Input from "../components/Input";
@@ -6,8 +6,7 @@ import Button from "../components/Button";
 import { useNavigate } from "react-router-dom";
 import Loader from "../components/Loader";
 import Footer from "../components/Footer";
-import { BASE_URL } from "../utils/config.js";
-import { AuthContext } from "../contexts/AuthContext";
+import { BASE_URL } from "../utils/helpers/config.js";
 
 const Register = () => {
   const [values, setValues] = useState({
@@ -21,8 +20,7 @@ const Register = () => {
   });
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
-  const [registerError, setRegisterError] = useState("");
-  const { token } = useContext(AuthContext);
+  const [registerError, setRegisterError] = useState("")
 
   const navigate = useNavigate();
 
@@ -106,9 +104,9 @@ const Register = () => {
     try {
       const response = await fetch(`${BASE_URL}/registro`, {
         method: "POST",
-        headers: { 
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json" 
+        credentials: 'include',
+        headers: {
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(dataToSend),
       });
@@ -119,9 +117,6 @@ const Register = () => {
         setLoading(false);
         return;
       }
-
-      const data = await response.json();
-      console.log(data);
 
       setValues({
         name: "",
@@ -175,20 +170,13 @@ const Register = () => {
           alt="Logo Knowlee"
           className="w-56 mx-auto my-7"
         />
-        <div className="bg-white rounded-lg border-solid border-2 border-blue-600 w-[50vw] mx-auto py-10 shadow-lg">
+        <div className="bg-white rounded-lg border-solid border-2 border-blue-600 w-[95vw] lg:w-[75vw] xl:w-[50vw] mx-auto py-10 shadow-lg">
           <i className="fa-solid fa-user fa-2xl my-5"></i>
-          <h3 className="text-center font-bold text-3xl">Registrarse</h3>
-          <a
-            href="/registro"
-            className="bg-[#f1f1f1] block text-center w-8/12 mx-auto my-5 shadow-inner p-3 hover:shadow-none transition duration-300"
-          >
-            Registrarse con Google{" "}
-            <i className="fa-brands fa-google fa-xl ml-2"></i>
-          </a>
+          <h1 className="text-center font-bold text-3xl">Registrarse</h1>
           <hr className="w-8/12 mx-auto" />
           <form
             onSubmit={handleSubmit}
-            className="flex flex-col justify-around items-center py-10 w-8/12 mx-auto"
+            className="flex flex-col justify-around items-center py-10 w-10/12 lg:w-8/12 mx-auto"
           >
             <div className="w-full my-1">
               <Label text="Nombre:" htmlFor="name" />
@@ -285,6 +273,9 @@ const Register = () => {
                 id="password"
                 aria-invalid={!!errors.password}
               />
+              <p className="text-gray-400 text-sm text-start">
+                La contraseña debe tener al menos 6 caracteres
+              </p>
               {errors.password && (
                 <p className="text-start  text-red-700 rounded-lg p-1">
                   <i className="fa-solid fa-xmark fa-lg"></i> {errors.password}
@@ -315,6 +306,13 @@ const Register = () => {
               </p>
             )}
             {loading && <Loader />}
+            <p className="text-gray-400 text-sm text-start">
+              Al registrarte, aceptás nuestros{" "}
+              <Link to="/términos-y-condiciones" className="underline">
+                Términos y condiciones
+              </Link>
+              .
+            </p>
             <Button text="Registrarse" type="submit" />
             <p className="text-gray-500">
               ¿Ya tenés una cuenta?{" "}
@@ -324,7 +322,7 @@ const Register = () => {
             </p>
           </form>
         </div>
-        <Footer />
+        <Footer className="mt-20" />
       </section>
     </div>
   );

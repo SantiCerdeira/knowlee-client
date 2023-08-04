@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import Label from "../components/Label";
 import Input from "../components/Input";
 import Button from "../components/Button";
@@ -6,8 +6,7 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import Loader from "../components/Loader";
 import Footer from "../components/Footer";
-import { BASE_URL } from "../utils/config.js";
-import { AuthContext } from "../contexts/AuthContext";
+import { BASE_URL } from "../utils/helpers/config.js";
 
 const Login = () => {
   const [values, setValues] = useState({
@@ -17,7 +16,6 @@ const Login = () => {
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [loginError, setLoginError] = useState("");
-  const { login } = useContext(AuthContext);
 
   const navigate = useNavigate();
 
@@ -61,22 +59,19 @@ const Login = () => {
     try {
       const response = await fetch(`${BASE_URL}/login`, {
         method: "POST",
+        credentials: 'include',
         headers: {
           "Content-Type": "application/json",
-
         },
         body: JSON.stringify(dataToSend),
       });
-       
+
       if (!response.ok) {
         const { message } = await response.json();
         setLoginError(message);
         setLoading(false);
         return;
       }
-
-      const data = await response.json();
-      login(data.token);
 
       setValues({
         email: "",
@@ -128,20 +123,13 @@ const Login = () => {
           alt="Logo Knowlee"
           className="w-56 mx-auto my-7"
         />
-        <div className="bg-white rounded-lg border-solid border-2 border-blue-600 w-[50vw] mx-auto py-10 shadow-lg mb-20">
+        <div className="bg-white rounded-lg border-solid border-2 border-blue-600 w-[95vw] lg:w-[75vw] xl:w-[50vw] mx-auto py-10 shadow-lg mb-20">
           <i className="fa-solid fa-user fa-2xl my-5"></i>
-          <h3 className="text-center font-bold text-3xl">Iniciar sesión</h3>
-          <a
-            href="/registro"
-            className="bg-[#f1f1f1] block text-center w-8/12 mx-auto my-5 shadow-inner p-3 hover:shadow-none transition duration-300"
-          >
-            Iniciar sesión con Google{" "}
-            <i className="fa-brands fa-google fa-xl ml-2"></i>
-          </a>
+          <h1 className="text-center font-bold text-3xl">Iniciar sesión</h1>
           <hr className="w-8/12 mx-auto" />
           <form
             onSubmit={handleSubmit}
-            className="flex flex-col justify-around items-center py-10 w-8/12 mx-auto"
+            className="flex flex-col justify-around items-center py-10 w-10/12 lg:w-8/12 mx-auto"
           >
             <div className="w-full my-1">
               <Label text="Email:" htmlFor="email" />
@@ -176,7 +164,10 @@ const Login = () => {
                   <i className="fa-solid fa-xmark fa-lg"></i> {errors.password}
                 </p>
               )}
-              <Link className="text-gray-500 text-end my-1" to='/contraseña-olvidada'>
+              <Link
+                className="block text-gray-500 text-end my-1"
+                to="/contraseña-olvidada"
+              >
                 ¿Olvidaste tu contraseña?
               </Link>
             </div>

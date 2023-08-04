@@ -1,15 +1,13 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect} from "react";
 import { Link } from "react-router-dom";
-import { isAuthenticated } from "../utils/auth";
-import { AuthContext } from "../contexts/AuthContext";
+import { isAuthenticated } from "../utils/helpers/auth.js";
 
-function Footer({className}) {
+function Footer({ className }) {
   const [authenticated, setAuthenticated] = useState(false);
-  const { token } = useContext(AuthContext);
 
   useEffect(() => {
-    isAuthenticated(token).then((result) => setAuthenticated(result));
-  }, [token]);
+    isAuthenticated().then((result) => setAuthenticated(result));
+  }, []);
 
   return (
     <footer className={`bg-[#336ee7] text-white py-3 ${className}`}>
@@ -60,8 +58,18 @@ function Footer({className}) {
           >
             Contacto
           </Link>
+          <Link
+            to="/términos-y-condiciones"
+            className="block py-3 px-3 text-white font-semibold text-lg rounded hover:scale-110 transition duration-200"
+          >
+            Términos y condiciones
+          </Link>
         </div>
       </div>
+      <p className="text-white my-3 text-sm text-center px-4">
+        © 2023 Knowlee. Todos los derechos reservados. Knowlee es una marca
+        registrada.
+      </p>
     </footer>
   );
 }

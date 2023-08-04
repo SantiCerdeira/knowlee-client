@@ -8,10 +8,12 @@ const Input = ({
   name,
   id,
   ariaInvalid,
+  autoComplete,
+  className,
 }) => {
   return (
     <input
-      className="w-full p-3 bg-[#f1f1f1] rounded-lg shadow-inner my-2"
+      className={`w-full p-3 bg-[#f1f1f1] rounded-lg shadow-inner my-2 ${className}`}
       type={type}
       placeholder={placeholder}
       value={value}
@@ -19,6 +21,7 @@ const Input = ({
       name={name}
       id={id}
       aria-invalid={ariaInvalid}
+      autoComplete={autoComplete}
     />
   );
 };

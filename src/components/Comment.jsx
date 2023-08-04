@@ -1,6 +1,5 @@
-import React, { useState, useContext } from "react";
-import { BASE_URL } from "../utils/config.js";
-import { AuthContext } from "../contexts/AuthContext.jsx";
+import React, { useState } from "react";
+import { BASE_URL } from "../utils/helpers/config.js";
 
 const Comment = ({
   name,
@@ -15,7 +14,6 @@ const Comment = ({
   user,
 }) => {
   const [showConfirmation, setShowConfirmation] = useState(false);
-  const { token } = useContext(AuthContext);
 
   const handleDeleteClick = () => {
     setShowConfirmation(!showConfirmation);
@@ -23,15 +21,10 @@ const Comment = ({
 
   const handleConfirmDelete = async () => {
     try {
-      const response = await fetch(
-        `${BASE_URL}/comment/${commentId}`,
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await fetch(`${BASE_URL}/comment/${commentId}`, {
+        method: "DELETE",
+        credentials: 'include'
+      });
 
       const data = await response.json();
       setShowConfirmation(false);

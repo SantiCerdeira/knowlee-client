@@ -1,25 +1,29 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { getAuthenticatedUser } from "../utils/getAuthenticateUser";
+import { getAuthenticatedUser } from "../utils/users/getAuthenticateUser.js";
 import Loader from "./Loader";
 import { AuthContext } from "../contexts/AuthContext";
+import useNotReadNotifications from "../utils/notifications/useNotReadNotifications";
 
 function Navbar() {
   const [user, setUser] = useState(null);
   const [showLogout, setShowLogout] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
-  const { logout, token } = useContext(AuthContext);
+  const { logout } = useContext(AuthContext);
+  const { notifications } = useNotReadNotifications(
+    user ? user._id : null
+  );
 
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUserData = async () => {
-      const user = await getAuthenticatedUser(token);
+      const user = await getAuthenticatedUser();
       setUser(user);
     };
     fetchUserData();
-  }, [token]);
+  }, []);
 
   const handleLogout = () => {
     setUser(null);
@@ -76,10 +80,13 @@ function Navbar() {
                       {user.name}
                     </Link>
                     <Link
-                      to="/notificaciones"
-                      className="py-3 px-3 text-white font-semibold text-lg rounded hover:scale-110 transition duration-200"
+                      to={`/notificaciones/${user._id}`}
+                      className="relative py-3 px-3 text-white font-semibold text-lg rounded hover:scale-110 transition duration-200"
                     >
                       <i className="fa-solid fa-bell"></i>
+                      <p className="absolute top-0 right-0 text-sm w-6 h-6 rounded-full p-1 bg-blue-400 text-white font-bold">
+                        {notifications.length}
+                      </p>
                     </Link>
                     <Link
                       to="/precios"
@@ -147,11 +154,14 @@ function Navbar() {
                   {user.name}
                 </Link>
                 <Link
-                  to="/notificaciones"
+                  to={`/notificaciones/${user._id}`}
                   className="block py-2 px-4 hover:bg-blue-500 text-start hover:rounded-lg"
                 >
                   <i className="fa-solid fa-bell"></i>
                   <p className="inline"> Notificaciones</p>
+                  <p className="inline mx-2 text-sm w-8 h-8 rounded-full p-2 bg-blue-400 text-white font-bold">
+                    {notifications.length}
+                  </p>
                 </Link>
                 <Link
                   to="/precios"

@@ -1,48 +1,35 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
-import { useNavigate } from "react-router-dom";
-import { isAuthenticated } from "../utils/auth";
-import { getUserId } from "../utils/getUserId";
-import { getUserById } from "../utils/getUserById";
+import { getUserId } from "../utils/users/getUserId";
 import Post from "../components/Post";
 import Feedback from "../components/Feedback";
-import { formatPostDate } from "../utils/formatPostDate";
-import { getAuthenticatedUser } from "../utils/getAuthenticateUser";
+import { formatPostDate } from "../utils/helpers/formatPostDate";
+import { getAuthenticatedUser } from "../utils/users/getAuthenticateUser.js";
 import Loader from "../components/Loader";
 import { Link } from "react-router-dom";
-import { BASE_URL } from "../utils/config.js";
-import { AuthContext } from "../contexts/AuthContext";
+import useUsers from "../utils/users/useUsers.js";
+import usePosts from "../utils/posts/usePosts.js";
+import useAuthentication from "../utils/helpers/useAuthentication.js";
 
 function HomePage() {
   const [userId, setUserId] = useState("");
-  const [posts, setPosts] = useState([]);
   const [user, setUser] = useState(null);
-  const [users, setUsers] = useState([]);
   const [message, setMessage] = useState(null);
   const [status, setStatus] = useState(null);
   const [showAllPosts, setShowAllPosts] = useState(true);
-  const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState({ posts: [], users: [] });
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [showSearchBar, setShowSearchBar] = useState(false);
   const [showResults, setShowResults] = useState(false);
-  const { token } = useContext(AuthContext);
+  const { users } = useUsers();
+  const { posts, loading } = usePosts();
 
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const userAuthenticated = async () => {
-      const result = await isAuthenticated(token);
-      if (!result) navigate("/login");
-    };
-
-    userAuthenticated();
-  }, [navigate, token]);
+  useAuthentication();
 
   useEffect(() => {
-    getUserId(token).then((result) => setUserId(result));
-  }, [token]);
+    getUserId().then((result) => setUserId(result));
+  }, []);
 
   const handleSearchQueryChange = (e) => {
     setSearchQuery(e.target.value);
@@ -53,74 +40,12 @@ function HomePage() {
   };
 
   useEffect(() => {
-    const fetchPosts = async () => {
-      setLoading(true);
-      try {
-        const posts = await fetch(`${BASE_URL}/posts/`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        const data = await posts.json();
-
-        const postWithData = await Promise.all(
-          data.map(async (post) => {
-            const authorUser = await getUserById(post.author, token);
-
-            const commentsResponse = await fetch(
-              `${BASE_URL}/get-comments/${post._id}`,
-              {
-                headers: {
-                  Authorization: `Bearer ${token}`,
-                },
-              }
-            );
-            const comments = await commentsResponse.json();
-
-            return {
-              ...post,
-              authorUser,
-              comments,
-            };
-          })
-        );
-
-        setPosts(postWithData);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error retrieving user posts:", error);
-        setLoading(false);
-      }
-    };
-
-    fetchPosts();
-  }, [token]);
-
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const users = await fetch(`${BASE_URL}/users`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        const data = await users.json();
-        setUsers(data);
-      } catch (error) {
-        console.error("Error retrieving users:", error);
-      }
-    };
-
-    fetchUsers();
-  }, [token]);
-
-  useEffect(() => {
     const fetchUserData = async () => {
-      const user = await getAuthenticatedUser(token);
+      const user = await getAuthenticatedUser();
       setUser(user);
     };
     fetchUserData();
-  }, [token]);
+  }, []);
 
   useEffect(() => {
     if (searchQuery === "") {
@@ -178,7 +103,7 @@ function HomePage() {
   return (
     <div>
       <Navbar />
-      <section className="w-full lg:w-[60vw] min-h-screen bg-blue-500 pb-5 mx-auto">
+      <section className="w-full lg:w-[75vw] xl:w-[60vw] min-h-screen bg-blue-400 pb-5 mx-auto">
         {!showResults && !showSearchBar && (
           <div className="flex justify-center">
             <button
@@ -291,27 +216,27 @@ function HomePage() {
               {searchResults.posts?.length > 0 &&
                 (selectedCategory === "posts" ||
                   selectedCategory === "all") && (
-                  <div className="flex flex-col-reverse gap-7">
+                  <div className="flex flex-col gap-7 px-3">
                     {searchResults.posts
                       .filter((post) => post.author !== userId)
                       .map((post) => (
                         <Post
+                          key={post._id}
+                          postId={post._id}
+                          premium={post.premium}
                           name={post.authorUser.name}
                           lastName={post.authorUser.lastName}
                           userName={post.authorUser.userName}
                           img={post.authorUser.profileImage}
-                          text={post.content}
-                          title={post.title}
-                          file={post.fileName}
-                          date={formatPostDate(post.date)}
-                          key={post._id}
-                          postId={post._id}
-                          likes={post.likes}
-                          ratings={post.ratings}
-                          comments={post.comments}
-                          premium={post.premium}
                           author={post.author}
                           authorPremium={post.authorUser.premium}
+                          title={post.title}
+                          text={post.content}
+                          date={formatPostDate(post.date)}
+                          likes={post.likes}
+                          comments={post.comments}
+                          file={post.fileName}
+                          ratings={post.ratings}
                           user={user}
                         />
                       ))}
@@ -373,86 +298,92 @@ function HomePage() {
                 <>
                   {!showAllPosts && user.following.length === 0 && (
                     <p className="text-white font-semibold text-3xl text-center my-10">
-                      No estás siguiendo a ningún usuario...
+                      No estás siguiendo a ningún usuario.
                     </p>
                   )}
                   {!showAllPosts &&
                     user.following.length > 0 &&
-                    posts.length === 0 && (
+                    posts.filter((post) =>
+                      user.following
+                        .map((user) => user.userId)
+                        .includes(post.author)
+                    ).length === 0 && (
                       <p className="text-white font-semibold text-3xl text-center my-10">
-                        No hay publicaciones de los usuarios que seguís...
+                        No hay publicaciones recientes de los usuarios que
+                        seguís.
                       </p>
                     )}
-                  {showAllPosts && posts.length === 0 && (
-                    <p className="text-white font-semibold text-3xl text-center my-10">
-                      No hay publicaciones recientes.
-                    </p>
-                  )}
-                  {posts &&
-                    posts.map((post) => {
-                      if (showAllPosts) {
-                        if (post.author !== userId) {
-                          return (
-                            <Post
-                              name={post.authorUser.name}
-                              lastName={post.authorUser.lastName}
-                              userName={post.authorUser.userName}
-                              img={post.authorUser.profileImage}
-                              valoracion="4/5"
-                              cantidad="10"
-                              text={post.content}
-                              title={post.title}
-                              file={post.fileName}
-                              date={formatPostDate(post.date)}
-                              likes={post.likes}
-                              ratings={post.ratings}
-                              comments={post.comments}
-                              key={post._id}
-                              postId={post._id}
-                              author={post.author}
-                              premium={post.premium}
-                              authorPremium={post.authorUser.premium}
-                              user={user}
-                              showCommentsForm={false}
-                            />
-                          );
+
+                  {showAllPosts &&
+                    !posts.some((post) => post.author !== userId) && (
+                      <p className="text-white font-semibold text-3xl text-center my-10">
+                        No hay publicaciones recientes.
+                      </p>
+                    )}
+
+                  <div className="flex flex-col gap-7 px-3">
+                    {posts &&
+                      posts.map((post) => {
+                        if (showAllPosts) {
+                          if (post.author !== userId) {
+                            return (
+                              <Post
+                                name={post.authorUser.name}
+                                lastName={post.authorUser.lastName}
+                                userName={post.authorUser.userName}
+                                img={post.authorUser.profileImage}
+                                text={post.content}
+                                title={post.title}
+                                file={post.fileName}
+                                date={formatPostDate(post.date)}
+                                likes={post.likes}
+                                ratings={post.ratings}
+                                comments={post.comments}
+                                key={post._id}
+                                postId={post._id}
+                                author={post.author}
+                                premium={post.premium}
+                                authorPremium={post.authorUser.premium}
+                                user={user}
+                                showCommentsForm={false}
+                              />
+                            );
+                          }
+                        } else {
+                          if (
+                            user.following &&
+                            user.following.some(
+                              (followedUser) =>
+                                followedUser.userId === post.author
+                            )
+                          ) {
+                            return (
+                              <Post
+                                name={post.authorUser.name}
+                                lastName={post.authorUser.lastName}
+                                userName={post.authorUser.userName}
+                                img={post.authorUser.profileImage}
+                                text={post.content}
+                                title={post.title}
+                                file={post.fileName}
+                                date={formatPostDate(post.date)}
+                                likes={post.likes}
+                                ratings={post.ratings}
+                                comments={post.comments}
+                                key={post._id}
+                                postId={post._id}
+                                author={post.author}
+                                premium={post.premium}
+                                authorPremium={post.authorUser.premium}
+                                user={user}
+                                showCommentsForm={false}
+                              />
+                            );
+                          }
                         }
-                      } else {
-                        if (
-                          user.following &&
-                          user.following.some(
-                            (followedUser) =>
-                              followedUser.userId === post.author
-                          )
-                        ) {
-                          return (
-                            <Post
-                              name={post.authorUser.name}
-                              lastName={post.authorUser.lastName}
-                              userName={post.authorUser.userName}
-                              img={post.authorUser.profileImage}
-                              valoracion="4/5"
-                              cantidad="10"
-                              text={post.content}
-                              title={post.title}
-                              file={post.fileName}
-                              date={formatPostDate(post.date)}
-                              likes={post.likes}
-                              ratings={post.ratings}
-                              comments={post.comments}
-                              key={post._id}
-                              postId={post._id}
-                              author={post.author}
-                              premium={post.premium}
-                              authorPremium={post.authorUser.premium}
-                              user={user}
-                              showCommentsForm={false}
-                            />
-                          );
-                        }
-                      }
-                      return null;
-                    })}
+                        return null;
+                      })}
+                  </div>
                 </>
               ) : (
                 <Loader />

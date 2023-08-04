@@ -1,74 +1,44 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import { useNavigate, useParams } from "react-router-dom";
-import { isAuthenticated } from "../utils/auth";
-import { getUserId } from "../utils/getUserId";
+import { getUserId } from "../utils/users/getUserId";
 import Post from "../components/Post";
-import { formatPostDate } from "../utils/formatPostDate";
-import { getAuthenticatedUser } from "../utils/getAuthenticateUser";
+import { formatPostDate } from "../utils/helpers/formatPostDate";
+import { getAuthenticatedUser } from "../utils/users/getAuthenticateUser.js";
 import Loader from "../components/Loader";
 import Feedback from "../components/Feedback";
-import { BASE_URL } from "../utils/config.js";
-import { AuthContext } from "../contexts/AuthContext";
+import { BASE_URL } from "../utils/helpers/config.js";
+import usePost from "../utils/posts/usePost.js";
+import useAuthentication from "../utils/helpers/useAuthentication.js";
 
 function PostPage() {
   const [userId, setUserId] = useState("");
-  const [post, setPost] = useState(null);
   const [user, setUser] = useState(null);
   const [message, setMessage] = useState(null);
   const [status, setStatus] = useState(null);
   const [comments, setComments] = useState("");
   const { postId } = useParams();
-  const { token } = useContext(AuthContext);
+  const { post } = usePost(postId);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const userAuthenticated = async () => {
-      const result = await isAuthenticated(token);
-      if (!result) navigate("/login");
-    };
-
-    userAuthenticated();
-  }, [navigate, token]);
+  useAuthentication();
 
   useEffect(() => {
-    getUserId(token).then((result) => setUserId(result));
-  }, [token]);
+    getUserId().then((result) => setUserId(result));
+  }, []);
 
   useEffect(() => {
     const fetchUserData = async () => {
-      const user = await getAuthenticatedUser(token);
+      const user = await getAuthenticatedUser();
       setUser(user);
     };
     fetchUserData();
-  }, [userId, token]);
-
-  useEffect(() => {
-    const fetchPost = async () => {
-      try {
-        const response = await fetch(`${BASE_URL}/post/${postId}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        const postData = await response.json();
-
-        setPost(postData);
-      } catch (error) {
-        console.error("Error al cargar la publiación:", error);
-      }
-    };
-
-    fetchPost();
-  }, [postId, token]);
+  }, [userId]);
 
   const fetchComments = async () => {
     try {
       const response = await fetch(`${BASE_URL}/get-comments/${postId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        credentials: 'include',
       });
 
       const commentsData = await response.json();
@@ -85,10 +55,19 @@ function PostPage() {
     navigate("/perfil");
   };
 
+  if (!post) {
+    return (
+      <div>
+        <Navbar />
+        <Loader />
+      </div>
+    );
+  }
+
   return (
     <div>
       <Navbar />
-      <section className="w-full lg:w-[60vw] min-h-screen bg-blue-500 mx-auto py-7">
+      <section className="w-full lg:w-[75vw] xl:w-[60vw] min-h-screen bg-blue-400 mx-auto py-7 px-5">
         <div className="flex flex-col gap-7 w-full lg:w-[100%] mx-auto">
           {message && (
             <Feedback
@@ -99,28 +78,29 @@ function PostPage() {
             />
           )}
           {!post && <Loader />}
-          {post && (
+          {user && post && (
             <Post
+              postId={post._id}
+              premium={post.premium}
+              key={post._id}
               name={post.author.name}
               lastName={post.author.lastName}
               userName={post.author.userName}
               img={post.author.profileImage}
-              text={post.content}
-              title={post.title}
-              file={post.fileName}
-              date={formatPostDate(post.date)}
-              likes={post.likes}
-              ratings={post.ratings}
-              key={post._id}
-              postId={post._id}
               author={post.author._id}
               authorPremium={post.author.premium}
-              premium={post.premium}
-              user={user}
+              title={post.title}
+              text={post.content}
+              date={formatPostDate(post.date)}
+              likes={post.likes}
               comments={comments}
-              onDelete={handlePostDelete}
-              fetchComments={fetchComments}
+              file={post.fileName}
+              ratings={post.ratings}
               showCommentsForm={true}
+              postPage={true}
+              fetchComments={fetchComments}
+              onDelete={handlePostDelete}
+              user={user}
             />
           )}
         </div>

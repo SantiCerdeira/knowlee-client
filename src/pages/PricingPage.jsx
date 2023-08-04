@@ -1,15 +1,11 @@
-import React, { useEffect, useState, useContext } from "react";
-import { isAuthenticated } from "../utils/auth";
-import { getAuthenticatedUser } from "../utils/getAuthenticateUser";
+import React, { useEffect, useState } from "react";
+import { isAuthenticated } from "../utils/helpers/auth.js";
+import { getAuthenticatedUser } from "../utils/users/getAuthenticateUser.js";
 import Navbar from "../components/Navbar";
 import { Link } from "react-router-dom";
-import Button from "../components/Button";
 import Feedback from "../components/Feedback";
-import { formatPostDate } from "../utils/formatPostDate";
+import { formatPostDate } from "../utils/helpers/formatPostDate";
 import Footer from "../components/Footer";
-import { BASE_URL } from "../utils/config.js";
-import Loader from "../components/Loader";
-import { AuthContext } from "../contexts/AuthContext";
 
 function PricingPage() {
   const [authenticated, setAuthenticated] = useState(false);
@@ -17,108 +13,39 @@ function PricingPage() {
   const [message, setMessage] = useState(null);
   const [status, setStatus] = useState(null);
   const [premium, setPremium] = useState(false);
-  const [showCancel, setShowCancel] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const {token} = useContext(AuthContext);
+  const [showMenu, setShowMenu] = useState(false);
+
+  const handleToggleMenu = () => {
+    setShowMenu((prevShowMenu) => !prevShowMenu);
+  };
 
   useEffect(() => {
-    isAuthenticated(token).then((result) => setAuthenticated(result));
-  }, [token]);
+    isAuthenticated().then((result) => setAuthenticated(result));
+  }, []);
 
   useEffect(() => {
     const fetchUserData = async () => {
-      const user = await getAuthenticatedUser(token);
+      const user = await getAuthenticatedUser();
       setUser(user);
-      console.log(user);
     };
     fetchUserData();
-  }, [token]);
+  }, []);
 
   useEffect(() => {
     setPremium(user?.premium);
   }, [user]);
-
-  const toggleCancel = () => {
-    setShowCancel(!showCancel);
-  };
-
-  const handlePremiumSubmit = async () => {
-    if (!user) {
-      setMessage("Inicia sesión para acceder a esta función");
-      setStatus("error");
-      return;
-    }
-
-    setLoading(true);
-
-    try {
-      const response = await fetch(`${BASE_URL}/premium`, {
-        method: "PATCH",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
-
-      const data = await response.json();
-      setMessage(data.message);
-      setStatus(data.status);
-      if (data.status === "success") setPremium(true);
-      setShowCancel(false);
-      setLoading(false);
-    } catch (error) {
-      setLoading(false);
-      console.log(error);
-    }
-  };
-
-  const handleCancelSubmit = async () => {
-    if (!user) {
-      setMessage("Inicia sesión para acceder a esta función");
-      setStatus("error");
-      return;
-    }
-
-    setLoading(true);
-
-    try {
-      const response = await fetch(`${BASE_URL}/cancel-premium`, {
-        method: "PATCH",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
-
-      const data = await response.json();
-      setMessage(data.message);
-      setStatus(data.status);
-      if (data.status === "success") setPremium(false);
-      setShowCancel(false);
-      setLoading(false);
-    } catch (error) {
-      setLoading(false); 
-      console.log(error);
-    }
-  };
 
   return (
     <div>
       {authenticated ? (
         <Navbar />
       ) : (
-        <nav className="py-4 mt-3">
+        <nav className="py-4 mt-3 relative">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
-            <div className="flex-shrink-0">
-              <Link to="/">
-                <img
-                  className="h-8 w-full"
-                  src="img/logo-final.png"
-                  alt="Logo"
-                />
-              </Link>
+            <div className="">
+              <img className="h-8 w-full" src="img/logo-final.png" alt="Logo" />
             </div>
-            <div className="flex justify-around gap-5">
+            <div className="lg:flex gap-5 hidden">
               <Link
                 to="/precios"
                 className="block py-3 px-3 text-black font-semibold text-lg rounded hover:scale-110 transition duration-200"
@@ -127,16 +54,46 @@ function PricingPage() {
               </Link>
               <Link
                 to="/login"
-                className="block bg-gradient-to-b from-blue-700 to-blue-500 hover:from-blue-400 hover:to-blue-400  py-3 px-7 text-white font-semibold text-lg rounded hover:scale-105 transition duration-200 drop-shadow-xl"
+                className="block bg-gradient-to-b from-blue-700 to-blue-600 hover:from-blue-400 hover:to-blue-400  py-3 px-7 text-white font-semibold text-lg rounded hover:scale-105 transition duration-200 drop-shadow-xl"
               >
                 Ingresar
               </Link>
               <Link
                 to="/registro"
-                className="block bg-white hover:from-blue-400 hover:to-blue-400 border-solid border-2 border-blue-500  py-3 px-7 font-semibold text-lg rounded hover:scale-105 transition duration-200 drop-shadow-xl text-gray-800"
+                className="block bg-white border-solid border-2 border-blue-500  py-3 px-7 font-semibold text-lg rounded hover:scale-105 transition duration-200 drop-shadow-xl text-gray-800"
               >
                 Registrarse
               </Link>
+            </div>
+            <div className="lg:hidden">
+              <button
+                onClick={handleToggleMenu}
+                className="block p-2 text-gray-800"
+              >
+                <i className="fa-solid fa-bars fa-2x"></i>
+              </button>
+              {showMenu && (
+                <div className="bg-white rounded-lg shadow-lg absolute top-20 left-0 w-full">
+                  <Link
+                    to="/precios"
+                    className="block px-4 py-2 text-black hover:bg-blue-200 transition duration-200"
+                  >
+                    Precios
+                  </Link>
+                  <Link
+                    to="/login"
+                    className="block px-4 py-2 text-black hover:bg-blue-200 transition duration-200"
+                  >
+                    Ingresar
+                  </Link>
+                  <Link
+                    to="/registro"
+                    className="block px-4 py-2 text-black hover:bg-blue-200 transition duration-200"
+                  >
+                    Registrarse
+                  </Link>
+                </div>
+              )}
             </div>
           </div>
         </nav>
@@ -202,11 +159,12 @@ function PricingPage() {
                 </Link>
               )}
               {user && !premium && (
-                <Button
-                  text={loading ? <Loader className='my-0'/> : "Comprar"}
-                  type="submit"
-                  onClick={handlePremiumSubmit}
-                />
+                <Link
+                  className="block bg-gradient-to-t from-blue-500 to-[#336ee7] text-white font-semibold p-3 rounded-lg my-5 mx-auto w-2/4 hover:scale-105 transition duration-200 drop-shadow-xl"
+                  to="/pagar-suscripción"
+                >
+                  Comprar
+                </Link>
               )}
               {user && premium && (
                 <div>
@@ -216,35 +174,16 @@ function PricingPage() {
                   <p className="font-semibold text-semibold">
                     Tu suscripción vence el {formatPostDate(user.deadline)}
                   </p>
-                  <p
-                    className="font-semibold text-semibold underline cursor-pointer"
-                    onClick={toggleCancel}
-                  >
-                    Cancelar ahora
-                  </p>
-                  {showCancel && (
-                    <div className="my-2">
-                      <p className="font-semibold text-semibold text-lg">
-                        ¿Querés cancelar la suscripción?
-                      </p>
-                      <p
-                        className="font-semibold text-semibold bg-gradient-to-t from-red-400 to-red-600 rounded-lg my-1 p-2 text-white cursor-pointer"
-                        onClick={handleCancelSubmit}
-                      >
-                        Sí, cancelar
-                      </p>
-                      <p
-                        className="font-semibold text-semibold bg-gradient-to-t from-blue-500 to-[#336ee7] rounded-lg my-1 p-2 text-white cursor-pointer"
-                        onClick={toggleCancel}
-                      >
-                        No, mantener
-                      </p>
-                    </div>
-                  )}
                 </div>
               )}
             </div>
           </article>
+          <Link
+            to="/código-promocional"
+            className="block w-[75vw] lg:w-[50vw] bg-gradient-to-t from-blue-500 to-blue-600 p-4 rounded-lg shadow-2xl text-white text-center font-semibold hover:scale-105 transition duration-200"
+          >
+            Tengo un código promocional
+          </Link>
         </div>
         {message && (
           <Feedback

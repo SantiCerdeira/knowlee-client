@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import Loader from "../components/Loader";
 import Footer from "../components/Footer";
-import { BASE_URL } from "../utils/config.js";
+import { BASE_URL } from "../utils/helpers/config.js";
 
 const NewPasswordRequest = () => {
   const [values, setValues] = useState({
@@ -46,15 +46,18 @@ const NewPasswordRequest = () => {
     }
 
     try {
-      const response = await fetch(`${BASE_URL}/reset-password/${values.email}`, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-       
-        const { message } = await response.json();
-        setReqError(message);
-        setLoading(false);
+      const response = await fetch(
+        `${BASE_URL}/restablecer-contrasena/${values.email}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      const { message } = await response.json();
+      setReqError(message);
+      setLoading(false);
 
       setValues({
         email: "",
@@ -62,9 +65,7 @@ const NewPasswordRequest = () => {
 
       navigate("/login");
     } catch (error) {
-        setReqError(
-        "Error al enviar el correo. Por favor, intentá nuevamente."
-      );
+      setReqError("Error al enviar el correo. Por favor, intentá nuevamente.");
       setLoading(false);
       console.log(error);
     }
@@ -105,13 +106,18 @@ const NewPasswordRequest = () => {
           alt="Logo Knowlee"
           className="w-56 mx-auto my-7"
         />
-        <div className="bg-white rounded-lg border-solid border-2 border-blue-600 w-[50vw] mx-auto py-10 shadow-lg mb-20">
+        <div className="bg-white rounded-lg border-solid border-2 border-blue-600 w-[95vw] lg:w-[75vw] xl:w-[50vw] mx-auto py-10 shadow-lg mb-20">
           <i className="fa-solid fa-user fa-2xl my-5"></i>
-          <h3 className="text-center font-bold text-3xl">Solicitar cambio de contraseña</h3>
-          <p className="text-center w-[75%] mx-auto text-gray-500 my-3">Si olvidaste tu contraseña, ingresá tu email y te vamos a enviar los pasos a seguir para poder cambiarla.</p>
+          <h1 className="text-center font-bold p-3 text-3xl">
+            Solicitar cambio de contraseña
+          </h1>
+          <p className="text-center w-[75%] mx-auto text-gray-500 my-3">
+            Si olvidaste tu contraseña, ingresá tu email y te vamos a enviar los
+            pasos a seguir para poder cambiarla.
+          </p>
           <form
             onSubmit={handleSubmit}
-            className="flex flex-col justify-around items-center py-5 w-8/12 mx-auto"
+            className="flex flex-col justify-around items-center py-5 w-10/12 lg:w-8/12 mx-auto"
           >
             <div className="w-full my-1">
               <Label text="Email:" htmlFor="email" />

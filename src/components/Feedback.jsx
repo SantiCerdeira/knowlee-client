@@ -1,30 +1,27 @@
 import React, { useEffect } from "react";
+import Toastify from "toastify-js";
+import "toastify-js/src/toastify.css";
 
 function Feedback({ message, status, setMessage, setStatus }) {
   useEffect(() => {
-    let timeout;
-
-    if (message) {
-      timeout = setTimeout(() => {
-        setMessage(null);
-        setStatus(null);
-      }, 5000);
+    if (message && status) {
+      Toastify({
+        text: message,
+        duration: 3000,
+        close: true,
+        gravity: "bottom",
+        style: {
+          background: status === "success" ? "#4b96e9" : "#f15056",
+          color: "white",
+          fontWeight: "bold",
+        },
+        stopOnFocus: true,
+        className: "text-black",
+      }).showToast();
     }
+  }, [message, status, setMessage, setStatus]);
 
-    return () => clearTimeout(timeout);
-  }, [message, setMessage, setStatus]);
-
-  return (
-    <div
-      className={`fixed bottom-4 right-4 p-4 rounded-lg shadow-lg border-2 border-solid font-semibold fade-in transition-all duration-500 ${
-        status === "success"
-          ? "bg-white border-blue-700"
-          : "bg-red-400 border-red-600"
-      }`}
-    >
-      {message}
-    </div>
-  );
+  return <></>;
 }
 
 export default Feedback;
