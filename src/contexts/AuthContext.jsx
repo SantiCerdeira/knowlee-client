@@ -1,4 +1,5 @@
 import React, { createContext, useState } from "react";
+import { BASE_URL } from "../utils/helpers/config.js";
 
 const AuthContext = createContext();
 
@@ -13,7 +14,7 @@ const AuthProvider = ({ children }) => {
 
   const logout = async (callback) => {
     try {
-      const response = await fetch('http://localhost:4321/logout', {
+      const response = await fetch(`${BASE_URL}/logout`, {
         method: 'POST',
         credentials: 'include', 
       });
