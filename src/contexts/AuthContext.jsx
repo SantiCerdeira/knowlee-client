@@ -1,5 +1,6 @@
 import React, { createContext, useState } from "react";
 import { BASE_URL } from "../utils/helpers/config.js";
+import Cookies from "js-cookie";
 
 const AuthContext = createContext();
 
@@ -20,7 +21,7 @@ const AuthProvider = ({ children }) => {
       });
       if (response.status === 200) {
         setToken(null);
-        document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/;'
+        Cookies.remove('token')       
         callback();
       }
     } catch (error) {
