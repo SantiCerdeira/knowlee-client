@@ -100,7 +100,7 @@ function PricingPage() {
       )}
       <section className="py-10 flex flex-col justify-center bg-blue-400">
         <div className="mb-10">
-          <h1 className="text-white font-bold text-center text-6xl">
+          <h1 className="text-white font-bold text-center text-3xl lg:text-6xl">
             Planes de Knowlee
           </h1>
         </div>
@@ -108,9 +108,9 @@ function PricingPage() {
           <article className="glass py-8 px-20 w-10/12 xl:w-5/12 mx-auto flex flex-col justify-between">
             <div>
               <h2 className="font-bold text-2xl mb-2">Plan básico</h2>
-              <p className="font-bold text-5xl mb-2 text-white">Gratis</p>
+              <p className="font-bold text-2xl lg:text-5xl text-center mb-2 text-white">Gratis</p>
               <hr className="mt-3 mb-5" />
-              <ul className="my-1 text-start list-disc w-9/12 mx-auto font-semibold text-lg">
+              <ul className="my-1 text-start list-disc w-9/12 mx-auto font-semibold text-base lg:text-lg">
                 <li>Subí contenido gratuito</li>
                 <li>Accedé a todos el contenido gratuito</li>
                 <li>Calificá y comentá</li>
@@ -136,9 +136,9 @@ function PricingPage() {
           <article className="glass py-8 px-20 w-10/12 xl:w-5/12 mx-auto flex flex-col justify-between">
             <div>
               <h2 className="font-bold text-2xl mb-2 w-full">Plan premium</h2>
-              <p className="font-bold text-5xl mb-2 text-white">$5000/mes</p>
+              <p className="font-bold text-2xl lg:text-5xl text-center mb-2 text-white">$5000/mes</p>
               <hr className="mt-3 mb-5" />
-              <ul className="my-1 text-start list-disc w-9/12 mx-auto font-semibold text-lg">
+              <ul className="my-1 text-start list-disc w-11/12 lg:w-9/12 mx-auto font-semibold text-base lg:text-lg">
                 <li>Subí contenido gratuito y/o de pago</li>
                 <li>Accedé a todos el contenido de la plataforma</li>
                 <li>Calificá y comentá</li>
@@ -152,7 +152,7 @@ function PricingPage() {
             <div>
               {!user && (
                 <Link
-                  className="block bg-gradient-to-t from-blue-500 to-[#336ee7] text-white font-semibold p-3 rounded-lg my-5 mx-auto w-2/4 hover:scale-105 transition duration-200 drop-shadow-xl"
+                  className="block text-center bg-gradient-to-t from-blue-500 to-[#336ee7] text-white font-semibold p-3 rounded-lg my-5 mx-auto w-full lg:w-2/4 hover:scale-105 transition duration-200 drop-shadow-xl"
                   to="/registro"
                 >
                   Registrarme
@@ -160,7 +160,7 @@ function PricingPage() {
               )}
               {user && !premium && (
                 <Link
-                  className="block bg-gradient-to-t from-blue-500 to-[#336ee7] text-white font-semibold p-3 rounded-lg my-5 mx-auto w-2/4 hover:scale-105 transition duration-200 drop-shadow-xl"
+                  className="block text-center bg-gradient-to-t from-blue-500 to-[#336ee7] text-white font-semibold p-3 rounded-lg my-5 mx-auto w-full lg:w-2/4 hover:scale-105 transition duration-200 drop-shadow-xl"
                   to="/pagar-suscripción"
                 >
                   Comprar

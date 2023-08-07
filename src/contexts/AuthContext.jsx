@@ -21,7 +21,7 @@ const AuthProvider = ({ children }) => {
       });
       if (response.status === 200) {
         setToken(null);
-        Cookies.remove('token')       
+        Cookies.remove('token')        
         callback();
       }
     } catch (error) {

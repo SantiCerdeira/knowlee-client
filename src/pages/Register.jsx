@@ -160,7 +160,7 @@ const Register = () => {
       </svg>
       <Link
         to="/"
-        className="w-[50%] lg:w-[25%] text-2xl font-semibold text-white bg-blue-600 px-4 py-2 rounded-lg text-center block m-5 hover:bg-blue-400 focus:bg-blue-400"
+        className="w-[60%] lg:w-[25%] text-lg lg:text-2xl font-semibold text-white bg-blue-600 px-4 py-2 rounded-lg text-center block m-5 hover:bg-blue-400 focus:bg-blue-400"
       >
         <i className="fa-solid fa-arrow-left"></i> Volver al inicio
       </Link>
