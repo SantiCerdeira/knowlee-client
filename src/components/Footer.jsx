@@ -47,6 +47,12 @@ function Footer({ className }) {
             </div>
           )}
           <Link
+            to="/"
+            className="block py-3 px-3 text-white font-semibold text-lg rounded hover:scale-110 transition duration-200"
+          >
+            Inicio
+          </Link>
+          <Link
             to="/precios"
             className="block py-3 px-3 text-white font-semibold text-lg rounded hover:scale-110 transition duration-200"
           >

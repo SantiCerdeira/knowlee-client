@@ -120,14 +120,14 @@ function PricingPage() {
             <div>
               {!user && (
                 <Link
-                  className="block bg-gradient-to-t from-blue-500 to-[#336ee7] text-white font-semibold p-3 rounded-lg my-5 mx-auto w-2/4 hover:scale-105 transition duration-200 drop-shadow-xl"
+                  className="block bg-gradient-to-t from-blue-500 to-[#336ee7] text-white font-semibold p-3 rounded-lg my-5 mx-auto w-full lg:w-2/4 hover:scale-105 transition duration-200 drop-shadow-xl"
                   to="/registro"
                 >
                   Registrarme
                 </Link>
               )}
               {user && (
-                <p className="bg-gradient-to-t from-blue-500 to-[#336ee7] text-white font-semibold p-3 rounded-lg my-5 mx-auto w-2/4 drop-shadow-xl opacity-70">
+                <p className="bg-gradient-to-t from-blue-500 to-[#336ee7] text-white font-semibold p-3 rounded-lg my-5 mx-auto w-full lg:w-2/4 drop-shadow-xl opacity-70">
                   Registrado/a <i className="fa-solid fa-check mx-1"></i>{" "}
                 </p>
               )}
