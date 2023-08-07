@@ -83,7 +83,7 @@ function PaymentPage() {
               {creditCards.map((card, index) => (
                 <div
                   key={index}
-                  className={`flex-shrink-0 w-7/12 xl:w-3/12 mx-auto px-4 py-10 cursor-pointer rounded-lg mb-4 bg-gradient-to-tr from-orange-300 to-purple-600 ${
+                  className={`w-10/12 xl:w-3/12 mx-auto px-4 py-10 cursor-pointer rounded-lg mb-4 bg-gradient-to-tr from-orange-300 to-purple-600 ${
                     selectedCard === index ? "border-2 border-white" : ""
                   } shadow-md hover:scale-105 hover:shadow-xl transition duration-100`}
                   onClick={() => setSelectedCard(index)}
