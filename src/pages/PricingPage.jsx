@@ -168,7 +168,7 @@ function PricingPage() {
               )}
               {user && premium && (
                 <div>
-                  <p className="bg-gradient-to-t from-blue-500 to-[#336ee7] text-white font-semibold p-3 rounded-lg my-5 mx-auto w-2/4 drop-shadow-xl opacity-70">
+                  <p className="bg-gradient-to-t from-blue-500 to-[#336ee7] text-white font-semibold p-3 rounded-lg my-5 mx-auto w-full lg:w-2/4 drop-shadow-xl opacity-70">
                     Contratado <i className="fa-solid fa-check mx-1"></i>{" "}
                   </p>
                   <p className="font-semibold text-semibold">

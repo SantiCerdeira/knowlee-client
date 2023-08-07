@@ -74,7 +74,7 @@ function PromoCode() {
             Canjear código promocional
           </h1>
         </div>
-        <div className="flex justify-center flex-wrap items-stretch gap-20 w-12/12 lg:w-9/12 mx-auto">
+        <div className="flex justify-center flex-wrap items-stretch gap-20 w-full lg:w-9/12 mx-auto">
           <article className="glass py-8 px-20 w-full flex flex-col justify-between">
             <div>
               <p className="font-semibold text-xl mb-2 text-white">
@@ -84,7 +84,7 @@ function PromoCode() {
               <hr className="mt-3 mb-5" />
             </div>
             <input
-              className="w-12/12 lg:w-6/12 mx-auto px-5 py-10 mb-4 rounded-lg text-black font-semibold text-5xl text-center"
+              className="w-11/12 lg:w-6/12 mx-auto px-5 py-10 mb-4 rounded-lg text-black font-semibold text-5xl text-center"
               type="text"
               value={codeValue}
               onChange={(e) => setCodeValue(e.target.value)}
