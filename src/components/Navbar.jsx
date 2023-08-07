@@ -4,13 +4,14 @@ import { useNavigate } from "react-router-dom";
 import { getAuthenticatedUser } from "../utils/users/getAuthenticateUser.js";
 import Loader from "./Loader";
 import { AuthContext } from "../contexts/AuthContext";
+import logout from "../utils/helpers/logout.js";
 import useNotReadNotifications from "../utils/notifications/useNotReadNotifications";
 
 function Navbar() {
   const [user, setUser] = useState(null);
   const [showLogout, setShowLogout] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
-  const { logout } = useContext(AuthContext);
+  // const { logout } = useContext(AuthContext);
   const { notifications } = useNotReadNotifications(
     user ? user._id : null
   );
