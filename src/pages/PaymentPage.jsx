@@ -68,7 +68,7 @@ function PaymentPage() {
       <Navbar />
       <section className="py-10 flex flex-col justify-center bg-blue-400">
         <div className="mb-10">
-          <h1 className="text-white font-bold text-center text-6xl">
+          <h1 className="text-white font-bold text-center text-3xl lg:text-6xl">
             Pagar suscripción
           </h1>
         </div>
@@ -76,7 +76,7 @@ function PaymentPage() {
           <article className="glass py-8 px-20 w-full flex flex-col justify-between">
             <div>
               <h2 className="font-bold text-2xl mb-2 w-full">Plan premium</h2>
-              <p className="font-bold text-5xl mb-2 text-white">$5000/mes</p>
+              <p className="font-bold text-2xl lg:text-5xl mb-2 text-white">$5000/mes</p>
               <hr className="mt-3 mb-5" />
             </div>
             <div className="flex flex-wrap overflow-x-auto">

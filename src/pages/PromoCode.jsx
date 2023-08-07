@@ -84,7 +84,7 @@ function PromoCode() {
               <hr className="mt-3 mb-5" />
             </div>
             <input
-              className="w-6/12 mx-auto px-5 py-10 mb-4 rounded-lg text-black font-semibold text-5xl text-center"
+              className="w-10/12 lg:w-6/12 mx-auto px-5 py-10 mb-4 rounded-lg text-black font-semibold text-5xl text-center"
               type="text"
               value={codeValue}
               onChange={(e) => setCodeValue(e.target.value)}

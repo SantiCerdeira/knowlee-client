@@ -50,7 +50,7 @@ function ContactPage() {
       <nav className="py-4 relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
           <div className="">
-            <img className="h-8 w-full" src="img/logo-blanco.png" alt="Logo" />
+            <img className="h-8 w-auto lg:w-full" src="img/logo-blanco.png" alt="Logo" />
           </div>
           <div className="lg:flex gap-5 hidden">
             {authenticated ? (
