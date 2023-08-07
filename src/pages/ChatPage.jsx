@@ -211,7 +211,7 @@ const ChatPage = () => {
               {chatLoading && <Loader />}
               {selectedChat && selectedUser ? (
                 <div
-                  className="customHeight max-w-[90%] mx-auto overflow-y-scroll"
+                  className="customHeight max-w-full lg:max-w-[90%] mx-auto overflow-y-scroll"
                   ref={chatContainerRef}
                 >
                   {selectedChat.messages.length === 0 && (
@@ -230,7 +230,7 @@ const ChatPage = () => {
                         }`}
                       >
                         <div
-                          className={`flex items-center max-w-[45%] gap-2 ${
+                          className={`flex items-center max-w-[85%] lg:max-w-[45%] gap-2 ${
                             message.sender === user._id
                               ? ""
                               : "flex-row-reverse"
