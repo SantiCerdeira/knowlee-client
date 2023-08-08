@@ -199,7 +199,7 @@ const ChatPage = () => {
             <div className="h-5/6">
               <h2 className="text-lg font-bold mb-2">Chat</h2>
               {!showUserList && (
-                <div className="fixed top-24 right-4 lg:hidden">
+                <div className="lg:hidden">
                   <button
                     className="bg-blue-500 text-white py-2 px-4 rounded-lg shadow-lg"
                     onClick={() => setShowUserList(!showUserList)}
