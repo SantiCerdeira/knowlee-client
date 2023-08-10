@@ -565,7 +565,7 @@ function Profile() {
                 >
                   <input
                     type="file"
-                    accept=".png, .jpg, .jpeg"
+                    accept=".png, .jpg, .jpeg, .webp, .avif"
                     name="profileImage"
                     id="profileImage"
                     onChange={handleImageChange}

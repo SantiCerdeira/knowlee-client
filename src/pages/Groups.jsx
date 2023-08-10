@@ -238,7 +238,7 @@ function Groups() {
               <Label text="Imagen:" htmlFor="image" />
               <Input
                 type="file"
-                accept=".png, .jpg, .jpeg"
+                accept=".png, .jpg, .jpeg, .webp, .avif"
                 onChange={handleImageChange}
                 name="image"
                 id="image"

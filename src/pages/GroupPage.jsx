@@ -557,7 +557,7 @@ function GroupPage() {
                 >
                   <input
                     type="file"
-                    accept=".png, .jpg, .jpeg"
+                    accept=".png, .jpg, .jpeg, .webp, .avif"
                     name="groupImage"
                     id="groupImage"
                     onChange={handleImageChange}
