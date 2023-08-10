@@ -157,7 +157,7 @@ function UserProfile() {
             <p className="text-md text-gray-400 mb-3">
               @{profileUser.userName}
             </p>
-            <p className="text-lg lg:text-xl text-black text-center xl:text-start">
+            <p className="text-lg lg:text-xl text-black text-center xl:text-start mb-3">
               {profileUser.description}
             </p>
             <div className="flex gap-2 justify-center xl:justify-start">
