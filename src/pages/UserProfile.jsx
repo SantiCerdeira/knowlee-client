@@ -158,7 +158,7 @@ function UserProfile() {
               @{profileUser.userName}
             </p>
             <p className="text-lg lg:text-xl text-black text-center xl:text-start">
-              {user.description}
+              {profileUser.description}
             </p>
             <div className="flex gap-2 justify-center xl:justify-start">
               <p
