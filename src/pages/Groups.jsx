@@ -247,7 +247,7 @@ function Groups() {
                 La imagen debe ser un .png,.jpg,.jpeg,.webp o .avif y pesar
                 menos de 1MB.
               </p>
-              <p className="text-center text-sm text-gray-500">
+              <p className="text-start text-sm text-gray-500">
                   Procurá que sea una imagen rectangular y preferentemente de mínimo 1500 píxeles de ancho para que se vea bien
                   horizontalmente.
                 </p>
