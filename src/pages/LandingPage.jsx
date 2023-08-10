@@ -148,12 +148,20 @@ function LandingPage() {
         <h2 className="text-5xl text-black font-bold">Funciones destacadas</h2>
         <div className="flex flex-wrap justify-around my-10">
           <Feature
-            text="Accedé a contenido de calidad"
+            text={
+              <>
+                Accedé a contenido <br className="hidden lg:inline"></br> de calidad
+              </>
+              }
             img="black-folder.png"
             className="lg:w-3/12"
           />
           <Feature
-            text="Conectate con otras personas que compartan tus intereses"
+            text={
+            <>
+              Conectate con otras personas <br className="hidden lg:inline"></br> que compartan tus intereses
+            </>
+            }
             img="chat.png"
             className="lg:w-6/12"
           />

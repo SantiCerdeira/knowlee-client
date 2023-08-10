@@ -424,7 +424,7 @@ const Post = ({
               {(user._id === author || isAdmin) && (
                 <button
                   onClick={handleDeleteClick}
-                  className="text-blue-600 bg-white border-2 border-solid border-blue-600 rounded-lg p-5 w-10 h-10 flex justify-center items-center ml-3 hover:scale-105 focus:scale-105 transition duration-200"
+                  className="text-black bg-white border-2 border-solid border-black rounded-lg p-5 w-10 h-10 flex justify-center items-center ml-3 hover:scale-105 focus:scale-105 transition duration-200"
                 >
                   <i className="fa-solid fa-trash"></i>
                 </button>
@@ -594,7 +594,7 @@ const Post = ({
           {postPage && (
             <>
               <div className="flex flex-row-reverse justify-between w-full">
-                <div className=" m-5 text-blue-600">
+                <div className=" m-5 text-black">
                   {favorite ? (
                     <i
                       className="fa-solid fa-bookmark fa-xl cursor-pointer"
@@ -607,7 +607,7 @@ const Post = ({
                     ></i>
                   )}
                 </div>
-                <div className="m-5 text-blue-600">
+                <div className="m-5 text-black">
                   <i
                     className="fa-regular fa-flag fa-xl cursor-pointer"
                     onClick={() => setShowReportModal(true)}
@@ -618,7 +618,7 @@ const Post = ({
           )}
           {!postPage && (
             <>
-              <div className="absolute bottom-0 right-0 m-5 text-blue-600">
+              <div className="absolute bottom-0 right-0 m-5 text-black">
                 {favorite ? (
                   <i
                     className="fa-solid fa-bookmark fa-xl cursor-pointer"
@@ -631,7 +631,7 @@ const Post = ({
                   ></i>
                 )}
               </div>
-              <div className="absolute bottom-0 left-0 m-5 text-blue-600">
+              <div className="absolute bottom-0 left-0 m-5 text-black">
                 <i
                   className="fa-regular fa-flag fa-xl cursor-pointer"
                   onClick={() => setShowReportModal(true)}

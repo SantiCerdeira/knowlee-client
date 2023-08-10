@@ -6,7 +6,7 @@ function Group({ id, name, image, members, isOwner }) {
     <Link
       to={`/grupo/${id}`}
       className={`w-11/12 lg:w-5/12 mx-auto my-3 shadow-md rounded-lg hover:scale-105 transition duration-200 ${
-        isOwner ? "border-blue-500 border-2 border-solid" : ""
+        isOwner ? "border-black border-4 border-solid" : ""
       }`}
       key={id}
     >

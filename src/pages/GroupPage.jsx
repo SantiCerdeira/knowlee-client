@@ -244,7 +244,7 @@ function GroupPage() {
       const response = await fetch(`${BASE_URL}/group-posts`, {
         method: "POST",
         body: formData,
-        credentials: 'include',
+        credentials: "include",
       });
 
       if (!response.ok) {
@@ -288,7 +288,7 @@ function GroupPage() {
     try {
       const response = await fetch(`${BASE_URL}/group/${groupId}`, {
         method: "DELETE",
-        credentials: 'include',
+        credentials: "include",
       });
 
       if (!response.ok) {
@@ -317,7 +317,7 @@ function GroupPage() {
         headers: {
           "Content-Type": "application/json",
         },
-        credentials: 'include',
+        credentials: "include",
         body: JSON.stringify({ userId }),
       });
 
@@ -340,7 +340,7 @@ function GroupPage() {
         headers: {
           "Content-Type": "application/json",
         },
-        credentials: 'include',
+        credentials: "include",
         body: JSON.stringify({ userId }),
       });
 
@@ -370,7 +370,7 @@ function GroupPage() {
         headers: {
           "Content-Type": "application/json",
         },
-        credentials: 'include',
+        credentials: "include",
         body: JSON.stringify({ description }),
       });
 
@@ -407,7 +407,7 @@ function GroupPage() {
       const response = await fetch(`${BASE_URL}/group/${groupId}/image`, {
         method: "POST",
         body: formData,
-        credentials: 'include',
+        credentials: "include",
       });
 
       const data = await response.json();
@@ -434,7 +434,7 @@ function GroupPage() {
         `${BASE_URL}/group/${groupId}/delete-image`,
         {
           method: "DELETE",
-          credentials: 'include',
+          credentials: "include",
         }
       );
 
@@ -497,11 +497,11 @@ function GroupPage() {
           <img
             src={group.image}
             alt={group.name}
-            className="object-cover object-center w-full h-48"
+            className="object-cover object-center w-full h-56 lg:h-72"
           />
           {isAdmin && (
             <div
-              className="absolute top-2 right-2 text-[#336ee7] bg-gray-100 rounded-full px-3 py-2 hover:scale-105 hover:cursor-pointer hover:text-white hover:bg-[#336ee7] transition duration-100"
+              className="absolute top-2 right-2 text-black bg-gray-100 rounded-full px-3 py-2 hover:scale-105 hover:cursor-pointer hover:text-white hover:bg-black transition duration-100"
               onClick={toggleImageForm}
             >
               <i className="fa-solid fa-pencil"></i>
@@ -511,11 +511,12 @@ function GroupPage() {
             <div className="w-full flex items-center justify-between">
               <h1 className="text-start text-black font-bold text-3xl my-2">
                 {group.name}
+                <span></span>
               </h1>
               {isAdmin && (
                 <button
                   onClick={toggleConfirmationForm}
-                  className="text-blue-600 bg-white border-2 border-solid border-blue-600 rounded-lg p-5 w-10 h-10 flex justify-center items-center ml-3 hover:scale-105 focus:scale-105 transition duration-200"
+                  className="text-black bg-white border-2 border-solid border-black rounded-lg p-5 w-10 h-10 flex justify-center items-center ml-3 hover:scale-105 focus:scale-105 transition duration-200"
                 >
                   <i className="fa-solid fa-trash"></i>
                 </button>
@@ -548,7 +549,7 @@ function GroupPage() {
               </div>
             )}
             {showImageForm && (
-              <div className="flex flex-col 2xl:flex-row items-center justify-center w-9/12 mx-auto my-3 rounded-md p-4 shadow-lg border-solid border-2 border-blue-600">
+              <div className="flex flex-col items-center justify-center w-9/12 mx-auto my-3 rounded-md p-4 shadow-lg border-solid border-2 border-blue-600">
                 <form
                   onSubmit={handleImageSubmit}
                   encType="multipart/form-data"
@@ -593,7 +594,11 @@ function GroupPage() {
                 {imageLoading && <Loader />}
                 <p className="text-center mt-2 text-sm text-gray-500">
                   La imagen debe ser un .png,.jpg,.jpeg,.webp o .avif y pesar
-                  menos de 1MB
+                  menos de 1MB.
+                </p>
+                <p className="text-center text-sm text-gray-500">
+                  Procurá que sea una imagen rectangular para que se vea bien
+                  horizontalmente.
                 </p>
               </div>
             )}
@@ -603,7 +608,7 @@ function GroupPage() {
               </p>
               {isAdmin && (
                 <div
-                  className="text-[#336ee7] bg-gray-100 rounded-full px-3 py-2 hover:scale-105 hover:cursor-pointer hover:text-white hover:bg-[#336ee7] transition duration-100"
+                  className="text-black bg-gray-100 rounded-full px-3 py-2 mt-2 hover:scale-105 hover:cursor-pointer hover:text-white hover:bg-black transition duration-100"
                   onClick={toggleDescriptionForm}
                 >
                   <i className="fa-solid fa-pencil"></i>
@@ -630,34 +635,34 @@ function GroupPage() {
                 </form>
               </div>
             )}
-            <p className="text-start text-gray-400 my-1 text-base">
-              {users.length} Miembro(s)
-            </p>
             {isMember ? (
-              <button
-                className="w-full bg-white rounded-lg text-blue-600 border-2 border-solid border-blue-400  shadow-md text-center py-3 font-semibold mb-3"
-                onClick={() => handleRemoveMember()}
-                disabled={isAdmin ? true : false}
-              >
-                <i className="fa-solid fa-user-check mx-3"></i> Miembro
-              </button>
-            ) : (
-              <button
-                className="w-full bg-blue-500 text-white rounded-lg shadow-md text-center py-3 font-semibold mb-3"
-                onClick={() => handleAddMember()}
-                disabled={isAdmin ? true : false}
-              >
-                <i className="fa-solid fa-user-plus mx-3"></i> Unirme
-              </button>
-            )}
+                <button
+                  className="w-4/12 bg-white rounded-lg text-blue-600 border-2 border-solid border-blue-400  shadow-md text-center py-3 font-semibold my-2"
+                  onClick={() => handleRemoveMember()}
+                  disabled={isAdmin ? true : false}
+                >
+                  <i className="fa-solid fa-user-check"></i> Miembro
+                </button>
+              ) : (
+                <button
+                  className="w-4/12 bg-blue-500 text-white rounded-lg shadow-md text-center py-3 font-semibold my-2"
+                  onClick={() => handleAddMember()}
+                  disabled={isAdmin ? true : false}
+                >
+                  <i className="fa-solid fa-user-plus"></i> Unirme
+                </button>
+              )}
+              <p className="text-center text-gray-500 my-1 text-base">
+                {users.length} Miembro(s)
+              </p>
           </div>
         </div>
       </div>
-      <section className="w-full lg:w-[75vw] xl:w-[60vw] min-h-screen bg-blue-400 pb-5 mx-auto">
+      <section className="w-full lg:w-[75vw] xl:w-[60vw] min-h-screen bg-[#c1d0f3] pb-5 mx-auto">
         {isMember && (
           <button
             onClick={togglePostForm}
-            className="bg-white font-semibold p-2 rounded-lg w-full  mx-auto text-blue-500 shadow-lg border-2 border-solid border-blue-600"
+            className="bg-white font-semibold p-2 rounded-lg w-full  mx-auto text-black shadow-lg border-2 border-solid border-black"
           >
             Crear nueva publicación{" "}
             <i className="fa-solid fa-circle-plus fa-xl"></i>
@@ -783,7 +788,7 @@ function GroupPage() {
             <button
               className={`${
                 showAllPosts ? "border-white border-b-2" : "border-none"
-              } px-4 py-2 text-white w-6/12 bg-blue-400 border-solid font-semibold text-lg`}
+              } px-4 py-2 text-white w-6/12 bg-blue-600 border-solid font-semibold text-lg`}
               onClick={() => setShowAllPosts(true)}
             >
               Publicaciones
@@ -791,7 +796,7 @@ function GroupPage() {
             <button
               className={`${
                 showAllPosts ? "border-none" : "border-white border-b-2"
-              } px-4 py-2 text-white w-6/12 bg-blue-400 border-solid font-semibold text-lg`}
+              } px-4 py-2 text-white w-6/12 bg-blue-600 border-solid font-semibold text-lg`}
               onClick={() => setShowAllPosts(false)}
             >
               Usuarios
@@ -802,7 +807,7 @@ function GroupPage() {
           <div className="bg-blue-400 ">
             <button
               onClick={() => setShowSearchBar(!showSearchBar)}
-              className="bg-white text-blue-500 px-5 py-2 font-semibold text-center w-full border-2 border-solid border-blue-400"
+              className="bg-white text-black px-5 py-2 font-semibold text-center w-full border-2 border-solid border-blue-600"
             >
               Buscar <i className="fa-solid fa-magnifying-glass mx-2"></i>
             </button>
@@ -811,7 +816,7 @@ function GroupPage() {
         <div className="flex flex-col gap-7">
           <div>
             {showSearchBar && posts && users && (
-              <div className="w-full bg-blue-400 pt-2">
+              <div className="w-full bg-blue-600 pt-2">
                 <div className="flex justify-center my-2">
                   <div className="bg-white w-[70%] rounded-full">
                     <input
@@ -823,20 +828,20 @@ function GroupPage() {
                     />
                     <button
                       onClick={performSearch}
-                      className="bg-white text-blue-400 py-2 px-4 rounded-r-full w-[10%]"
+                      className="bg-white text-black py-2 px-4 rounded-r-full w-[10%]"
                     >
                       <i className="fa-solid fa-magnifying-glass"></i>
                     </button>
                   </div>
                   <button
                     onClick={clearSearch}
-                    className="bg-blue-400 text-white py-2 px-4 "
+                    className="bg-blue-600 text-white py-2 px-4 "
                   >
                     <i className="fa-solid fa-trash"></i>
                   </button>
                   <button
                     onClick={closeSearch}
-                    className="bg-blue-400 text-white py-2 px-4 "
+                    className="bg-blue-600 text-white py-2 px-4 "
                   >
                     <i className="fa-solid fa-xmark"></i>
                   </button>
@@ -847,7 +852,7 @@ function GroupPage() {
                     className={`${
                       selectedCategory === "all"
                         ? "bg-white text-blue-500"
-                        : "bg-blue-400 text-white"
+                        : "bg-blue-600 text-white"
                     } px-4 py-2  w-4/12  border-solid font-semibold text-lg`}
                   >
                     Todo
@@ -857,7 +862,7 @@ function GroupPage() {
                     className={`${
                       selectedCategory === "posts"
                         ? "bg-white text-blue-500"
-                        : "bg-blue-400 text-white"
+                        : "bg-blue-600 text-white"
                     } px-4 py-2  w-4/12  border-solid font-semibold text-lg`}
                   >
                     Publicaciones
@@ -867,7 +872,7 @@ function GroupPage() {
                     className={`${
                       selectedCategory === "users"
                         ? "bg-white text-blue-500"
-                        : "bg-blue-400 text-white"
+                        : "bg-blue-600 text-white"
                     } px-4 py-2  w-4/12  border-solid font-semibold text-lg`}
                   >
                     Usuarios
@@ -881,7 +886,7 @@ function GroupPage() {
               {searchResults.posts?.length === 0 &&
                 (selectedCategory === "posts" ||
                   selectedCategory === "all") && (
-                  <p className="text-white font-semibold text-3xl text-center my-10">
+                  <p className="text-black font-semibold text-xl lg:text-3xl drop-shadow-xl text-center my-10">
                     No se encontraron publicaciones.
                   </p>
                 )}
@@ -916,7 +921,7 @@ function GroupPage() {
                     {searchResults.posts.some(
                       (post) => post.author !== userId
                     ) && (
-                      <h2 className="text-white font-bold text-3xl text-start mb-2 mx-10">
+                      <h2 className="text-black font-bold text-xl lg:text-3xl drop-shadow-xl text-start mb-2 mx-10">
                         Publicaciones
                       </h2>
                     )}
@@ -927,7 +932,7 @@ function GroupPage() {
                 (selectedCategory === "users" ||
                   selectedCategory === "all") && (
                   <div>
-                    <h2 className="text-white font-bold text-3xl text-start mb-2 mx-10">
+                    <h2 className="text-black font-bold text-xl lg:text-3xl drop-shadow-xl text-start mb-2 mx-10">
                       Usuarios
                     </h2>
                     {searchResults.users.map((user) => (
@@ -958,7 +963,7 @@ function GroupPage() {
               {!searchResults.users?.length &&
                 (selectedCategory === "users" ||
                   selectedCategory === "all") && (
-                  <p className="text-white font-semibold text-3xl text-center my-10">
+                  <p className="text-black font-semibold text-xl lg:text-3xl drop-shadow-xl text-center my-10">
                     No se encontraron usuarios.
                   </p>
                 )}
@@ -972,7 +977,7 @@ function GroupPage() {
                   {showAllPosts ? (
                     <>
                       {posts.length === 0 && (
-                        <p className="text-white font-semibold text-3xl text-center my-10">
+                        <p className="text-black font-semibold text-xl lg:text-3xl drop-shadow-xl text-center my-10">
                           No hay publicaciones en este grupo.
                         </p>
                       )}
@@ -1007,7 +1012,7 @@ function GroupPage() {
                     </>
                   ) : (
                     <div>
-                      <h2 className="text-white font-bold text-3xl text-start mb-2 mx-10">
+                      <h2 className="text-black font-bold text-xl lg:text-3xl drop-shadow-xl text-start mb-2 mx-10">
                         Usuarios
                       </h2>
                       {users.map((user) => (

@@ -67,7 +67,7 @@ function PostPage() {
   return (
     <div>
       <Navbar />
-      <section className="w-full lg:w-[75vw] xl:w-[60vw] min-h-screen bg-blue-400 mx-auto py-7 px-5">
+      <section className="w-full lg:w-[75vw] xl:w-[60vw] min-h-screen bg-[#c1d0f3] mx-auto py-7 px-5">
         <div className="flex flex-col gap-7 w-full lg:w-[100%] mx-auto">
           {message && (
             <Feedback

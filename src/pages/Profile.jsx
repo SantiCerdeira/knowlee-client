@@ -429,7 +429,7 @@ function Profile() {
               alt={user.name + user.lastName}
             />
             <div
-              className="absolute text-[#336ee7] top-0 right-0 bg-gray-100 rounded-full px-3 py-2 hover:scale-105 hover:cursor-pointer hover:text-white hover:bg-[#336ee7] transition duration-100"
+              className="absolute text-black top-0 right-0 bg-gray-100 rounded-full px-3 py-2 hover:scale-105 hover:cursor-pointer hover:text-white hover:bg-black transition duration-100"
               onClick={toggleDataForm}
             >
               <i className="fa-solid fa-pencil"></i>
@@ -460,7 +460,7 @@ function Profile() {
                 </p>
               )}
               <div
-                className=" text-[#336ee7] bg-gray-100 rounded-full px-3 py-2 hover:scale-105 hover:cursor-pointer hover:text-white hover:bg-[#336ee7] transition duration-100"
+                className=" text-black bg-gray-100 rounded-full px-3 py-2 hover:scale-105 hover:cursor-pointer hover:text-white hover:bg-black transition duration-100"
                 onClick={toggleDescriptionForm}
               >
                 <i className="fa-solid fa-pencil"></i>
@@ -542,7 +542,7 @@ function Profile() {
                   )}
               </div>
               <div
-                className=" text-[#336ee7] bg-gray-100 rounded-full px-3 py-2 hover:scale-105 hover:cursor-pointer hover:text-white hover:bg-[#336ee7] transition duration-100"
+                className=" text-black bg-gray-100 rounded-full px-3 py-2 hover:scale-105 hover:cursor-pointer hover:text-white hover:bg-black transition duration-100"
                 onClick={toggleLinksForm}
               >
                 <i className="fa-solid fa-pencil"></i>
@@ -680,10 +680,10 @@ function Profile() {
           )}
         </div>
 
-        <div className="w-full xl:w-[75vw] mx-auto flex flex-col gap-7 min-h-[70vh] shadow-lg p-5 rounded-t-3xl bg-blue-400">
+        <div className="w-full xl:w-[75vw] mx-auto flex flex-col gap-7 min-h-[70vh] shadow-lg p-5 rounded-t-3xl bg-[#c1d0f3]">
           <button
             onClick={togglePostForm}
-            className="bg-white font-semibold p-2 rounded-lg w-[75%]  mx-auto text-blue-500 shadow-lg hover:scale-105 transition duration-300 border-2 border-solid border-blue-600"
+            className="bg-white font-semibold p-2 rounded-lg w-[75%]  mx-auto text-black shadow-lg hover:scale-105 transition duration-300 border-2 border-solid border-black"
           >
             Crear nueva publicación{" "}
             <i className="fa-solid fa-circle-plus fa-xl"></i>
@@ -804,7 +804,7 @@ function Profile() {
           )}
           {postsLoading && <Loader />}
           {!postsLoading && userPosts.length === 0 && (
-            <p className="font-bold text-white text-3xl my-7">
+            <p className="text-black font-semibold text-xl lg:text-3xl drop-shadow-xl my-7">
               Aún no realizaste ninguna publicación
             </p>
           )}

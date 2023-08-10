@@ -39,7 +39,7 @@ function FavoritePosts() {
       <h1 className="text-black font-semibold text-3xl text-center my-5 ">
         Publicaciones guardadas en favoritos
       </h1>
-      <section className="w-full lg:w-[60vw] min-h-screen bg-blue-400 p-5 mx-auto rounded-t-2xl">
+      <section className="w-full lg:w-[60vw] min-h-screen bg-[#c1d0f3] p-5 mx-auto rounded-t-2xl">
         <div className="flex flex-col gap-7">
           {!postsLoading ? (
             <>

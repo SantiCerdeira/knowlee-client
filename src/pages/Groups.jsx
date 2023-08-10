@@ -180,7 +180,7 @@ function Groups() {
       <section className="w-full lg:w-[60vw] bg-white pb-5 mx-auto py-5">
         <button
           onClick={toggleForm}
-          className="bg-white font-semibold p-2 rounded-lg w-[75%]  mx-auto text-blue-500 shadow-lg hover:scale-105 transition duration-300 border-2 border-solid border-blue-600"
+          className="bg-white font-semibold p-2 rounded-lg w-[75%]  mx-auto text-black shadow-lg hover:scale-105 transition duration-300 border-2 border-solid border-black"
         >
           Crear nuevo grupo <i className="fa-solid fa-circle-plus fa-xl"></i>
         </button>
@@ -245,7 +245,10 @@ function Groups() {
               />
               <p className="text-start text-sm text-gray-500">
                 La imagen debe ser un .png,.jpg,.jpeg,.webp o .avif y pesar
-                menos de 1MB
+                menos de 1MB.
+              </p>
+              <p className="text-start text-sm text-gray-500">
+                Procurá que sea una imagen rectangular para que se vea bien horizontalmente.
               </p>
             </div>
             <p className="w-[85%] mx-auto text-start text-sm text-gray-500 mt-3">
@@ -262,10 +265,10 @@ function Groups() {
         )}
 
         {!showSearchBar && (
-          <div className="bg-white font-semibold p-2 rounded-lg w-[75%] my-2  mx-auto text-blue-500 shadow-lg hover:scale-105 transition duration-300 border-2 border-solid border-blue-600">
+          <div className="bg-white font-semibold p-2 rounded-lg w-[75%] my-2  mx-auto text-black shadow-lg hover:scale-105 transition duration-300 border-2 border-solid border-black">
             <button
               onClick={() => setShowSearchBar(!showSearchBar)}
-              className="bg-white text-blue-500 px-5 font-semibold text-center w-full"
+              className="bg-white text-black px-5 font-semibold text-center w-full"
             >
               Buscar <i className="fa-solid fa-magnifying-glass mx-2"></i>
             </button>
@@ -285,7 +288,7 @@ function Groups() {
                   />
                   <button
                     onClick={performSearch}
-                    className="bg-white text-blue-500 py-2 px-4 w-[10%]"
+                    className="bg-white text-black py-2 px-4 w-[10%]"
                   >
                     <i className="fa-solid fa-magnifying-glass"></i>
                   </button>

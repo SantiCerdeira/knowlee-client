@@ -103,7 +103,7 @@ function HomePage() {
   return (
     <div>
       <Navbar />
-      <section className="w-full lg:w-[75vw] xl:w-[60vw] min-h-screen bg-blue-400 pb-5 mx-auto">
+      <section className="w-full lg:w-[75vw] xl:w-[60vw] min-h-screen bg-[#c1d0f3] pb-5 mx-auto">
         {!showResults && !showSearchBar && (
           <div className="flex justify-center">
             <button
@@ -128,7 +128,7 @@ function HomePage() {
           <div className="bg-blue-600 pt-2">
             <button
               onClick={() => setShowSearchBar(!showSearchBar)}
-              className="bg-white text-blue-500 px-5 py-2 font-semibold text-center w-full border-2 border-solid border-blue-600"
+              className="bg-white text-black px-5 py-2 font-semibold text-center w-full border-2 border-solid border-blue-600"
             >
               Buscar <i className="fa-solid fa-magnifying-glass mx-2"></i>
             </button>
@@ -149,7 +149,7 @@ function HomePage() {
                     />
                     <button
                       onClick={performSearch}
-                      className="bg-white text-blue-500 py-2 px-4 rounded-r-full w-[10%]"
+                      className="bg-white text-black py-2 px-4 rounded-r-full w-[10%]"
                     >
                       <i className="fa-solid fa-magnifying-glass"></i>
                     </button>
@@ -208,7 +208,7 @@ function HomePage() {
                 searchResults.posts.every((post) => post.author === userId)) &&
                 (selectedCategory === "posts" ||
                   selectedCategory === "all") && (
-                  <p className="text-white font-semibold text-3xl text-center my-10">
+                  <p className="text-black font-semibold text-xl lg:text-3xl drop-shadow-xl text-center my-10">
                     No se encontraron publicaciones.
                   </p>
                 )}
@@ -285,7 +285,7 @@ function HomePage() {
               {!searchResults.users?.length &&
                 (selectedCategory === "users" ||
                   selectedCategory === "all") && (
-                  <p className="text-white font-semibold text-3xl text-center my-10">
+                  <p className="text-black font-semibold text-xl lg:text-3xl drop-shadow-xl text-center my-10">
                     No se encontraron usuarios.
                   </p>
                 )}
@@ -297,7 +297,7 @@ function HomePage() {
               {!loading ? (
                 <>
                   {!showAllPosts && user.following.length === 0 && (
-                    <p className="text-white font-semibold text-3xl text-center my-10">
+                    <p className="text-black font-semibold text-xl lg:text-3xl drop-shadow-xl text-center my-10">
                       No estás siguiendo a ningún usuario.
                     </p>
                   )}
@@ -308,7 +308,7 @@ function HomePage() {
                         .map((user) => user.userId)
                         .includes(post.author)
                     ).length === 0 && (
-                      <p className="text-white font-semibold text-3xl text-center my-10">
+                      <p className="text-black font-semibold text-xl lg:text-3xl drop-shadow-xl text-center my-10">
                         No hay publicaciones recientes de los usuarios que
                         seguís.
                       </p>
@@ -316,7 +316,7 @@ function HomePage() {
 
                   {showAllPosts &&
                     !posts.some((post) => post.author !== userId) && (
-                      <p className="text-white font-semibold text-3xl text-center my-10">
+                      <p className="text-black font-semibold text-xl lg:text-3xl drop-shadow-xl text-center my-10">
                         No hay publicaciones recientes.
                       </p>
                     )}

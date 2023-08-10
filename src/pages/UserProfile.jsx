@@ -174,22 +174,7 @@ function UserProfile() {
             {showModal && (
               <UsersModal closeModal={closeModal} users={currentList} />
             )}
-            {userIsFollowing ? (
-              <button
-                className="bg-white rounded-lg text-blue-600 border-2 border-solid border-blue-400  shadow-md text-center p-3 font-semibold mb-3"
-                onClick={() => handleUnfollow(authUserId, userId)}
-              >
-                <i className="fa-solid fa-user-check mx-3"></i> Siguiendo
-              </button>
-            ) : (
-              <button
-                className="bg-blue-500 text-white rounded-lg shadow-md text-center p-3 font-semibold mb-3"
-                onClick={() => handleFollow(authUserId, userId)}
-              >
-                <i className="fa-solid fa-user-plus mx-3"></i> Seguir
-              </button>
-            )}
-            <div className="flex justify-center xl:justify-start gap-2">
+            <div className="flex justify-center xl:justify-start gap-2 my-2">
               {profileUser.coffeeLink && (
                 <a
                   href={profileUser.coffeeLink}
@@ -230,6 +215,21 @@ function UserProfile() {
                 </a>
               )}
             </div>
+            {userIsFollowing ? (
+              <button
+                className="w-7/12 lg:w-4/12 mx-auto bg-white rounded-lg text-blue-600 border-2 border-solid border-blue-400  shadow-md text-center p-3 font-semibold mb-3"
+                onClick={() => handleUnfollow(authUserId, userId)}
+              >
+                <i className="fa-solid fa-user-check mx-3"></i> Siguiendo
+              </button>
+            ) : (
+              <button
+                className="w-7/12 lg:w-4/12 mx-auto bg-blue-500 text-white rounded-lg shadow-md text-center p-3 font-semibold mb-3"
+                onClick={() => handleFollow(authUserId, userId)}
+              >
+                <i className="fa-solid fa-user-plus mx-3"></i> Seguir
+              </button>
+            )}
             {message && (
               <Feedback
                 message={message}
@@ -241,10 +241,10 @@ function UserProfile() {
           </div>
         </div>
 
-        <div className="w-full xl:w-[75vw] mx-auto flex flex-col gap-7 min-h-[70vh] shadow-lg p-5 rounded-t-3xl bg-blue-400">
+        <div className="w-full xl:w-[75vw] mx-auto flex flex-col gap-7 min-h-[70vh] shadow-lg p-5 rounded-t-3xl bg-[#c1d0f3]">
           {postsLoading && <Loader />}
           {!postsLoading && userPosts.length === 0 && (
-            <p className="font-bold text-3xl my-7 text-white">
+            <p className="text-black font-semibold text-xl lg:text-3xl drop-shadow-xl my-7">
               Este usuario no ha realizado ninguna publicación
             </p>
           )}

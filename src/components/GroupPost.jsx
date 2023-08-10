@@ -378,7 +378,7 @@ const GroupPost = ({
               {(user._id === author || isAdmin) && (
                 <button
                   onClick={handleDeleteClick}
-                  className="text-blue-600 bg-white border-2 border-solid border-blue-600 rounded-lg p-5 w-10 h-10 flex justify-center items-center ml-3 hover:scale-105 focus:scale-105 transition duration-200"
+                  className="text-black bg-white border-2 border-solid border-black rounded-lg p-5 w-10 h-10 flex justify-center items-center ml-3 hover:scale-105 focus:scale-105 transition duration-200"
                 >
                   <i className="fa-solid fa-trash"></i>
                 </button>
@@ -552,7 +552,7 @@ const GroupPost = ({
               {postComments && postComments.length})
             </Link>
           </div>
-          <div className="m-5 text-blue-600 text-start">
+          <div className="m-5 text-black text-start">
             <i
               className="fa-regular fa-flag fa-xl ml:0 cursor-pointer"
               onClick={() => setShowReportModal(true)}
