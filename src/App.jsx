@@ -22,7 +22,7 @@ import { Route, Routes } from "react-router-dom";
 // import NewPasswordRequest from "./pages/NewPasswordRequest";
 // import TermsAndConditions from "./pages/TermsAndConditions";
 // import NewPassword from "./pages/NewPassword";
-// import Notifications from "./pages/Notifications";
+// import Notifications from "./pages/Notifications"
 import { AuthProvider } from "./contexts/AuthContext";
 import Loader from "./components/Loader";
 
