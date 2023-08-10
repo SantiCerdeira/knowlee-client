@@ -597,7 +597,7 @@ function GroupPage() {
                   menos de 1MB.
                 </p>
                 <p className="text-center text-sm text-gray-500">
-                  Procurá que sea una imagen rectangular para que se vea bien
+                  Procurá que sea una imagen rectangular y preferentemente de mínimo 1500 píxeles de ancho para que se vea bien
                   horizontalmente.
                 </p>
               </div>
