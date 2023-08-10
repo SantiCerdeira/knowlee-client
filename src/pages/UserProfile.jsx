@@ -70,7 +70,7 @@ function UserProfile() {
     try {
       const response = await fetch(`${BASE_URL}/follow`, {
         method: "PATCH",
-        credentials: 'include',
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
@@ -98,7 +98,7 @@ function UserProfile() {
         headers: {
           "Content-Type": "application/json",
         },
-        credentials: 'include',
+        credentials: "include",
         body: JSON.stringify({ followerId, followingId }),
       });
 
@@ -156,6 +156,9 @@ function UserProfile() {
             </h1>
             <p className="text-md text-gray-400 mb-3">
               @{profileUser.userName}
+            </p>
+            <p className="text-lg lg:text-xl text-black text-center xl:text-start">
+              {user.description}
             </p>
             <div className="flex gap-2 justify-center xl:justify-start">
               <p
