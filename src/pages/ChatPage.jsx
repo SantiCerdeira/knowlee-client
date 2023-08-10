@@ -139,7 +139,7 @@ const ChatPage = () => {
         {showUserList && (
           <div className="relative bg-blue-500  p-5 lg:hidden">
             <h2 className="text-white text-lg font-bold mb-4">Usuarios</h2>
-            <div className="absolute top-3 right-3 lg:hidden">
+            <div className="absolute top-3 right-3 lg:hidden overflow-scroll">
               <button
                 className="bg-blue-400 text-white py-2 px-4 rounded-lg shadow-lg"
                 onClick={() => setShowUserList(!showUserList)}
@@ -170,7 +170,7 @@ const ChatPage = () => {
             </ul>
           </div>
         )}
-        <div className="bg-blue-500 p-5 lg:w-1/4 hidden lg:inline-block">
+        <div className="bg-blue-500 overflow-scroll p-5 lg:w-1/4 hidden lg:inline-block">
           <h2 className="text-white text-lg font-bold mb-4">Usuarios</h2>
           <ul>
             {users
